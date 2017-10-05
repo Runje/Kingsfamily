@@ -3,7 +3,7 @@ package com.koenig.communication.messages;
 
 
 import com.example.Message;
-import com.koenig.communication.MessageConverter;
+import com.koenig.BinaryConverter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +15,8 @@ import java.nio.ByteBuffer;
  */
 
 public abstract class FamilyMessage implements Message {
-    protected Logger logger = LoggerFactory.getLogger(getClass().getSimpleName());
     public static final String ServerId = "KOENIGSPUTZ_SERVER_ID";
+    protected Logger logger = LoggerFactory.getLogger(getClass().getSimpleName());
     protected String fromId;
     protected String toId;
 
@@ -24,7 +24,7 @@ public abstract class FamilyMessage implements Message {
 
     public int getTotalLength()
     {
-        int length = MessageConverter.sizeLength + 2 + getName().length() + 2 + fromId.length() + 2 + toId.length() + getContentLength();
+        int length = BinaryConverter.sizeLength + 2 + getName().length() + 2 + fromId.length() + 2 + toId.length() + getContentLength();
         return length;
     }
 
@@ -54,9 +54,9 @@ public abstract class FamilyMessage implements Message {
 
     protected void headerToBuffer(ByteBuffer buffer) {
         buffer.putInt(getTotalLength());
-        buffer.put(MessageConverter.stringToByte(getName()));
-        buffer.put(MessageConverter.stringToByte(fromId));
-        buffer.put(MessageConverter.stringToByte(toId));
+        buffer.put(BinaryConverter.stringToByte(getName()));
+        buffer.put(BinaryConverter.stringToByte(fromId));
+        buffer.put(BinaryConverter.stringToByte(toId));
     }
 
     public ByteBuffer getBuffer()

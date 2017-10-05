@@ -1,9 +1,10 @@
 package com.koenig.communication;
 
 
-import com.koenig.communication.messages.TextMessage;
+import com.koenig.BinaryConverter;
 import com.koenig.communication.messages.AskForUserMessage;
 import com.koenig.communication.messages.FamilyMessage;
+import com.koenig.communication.messages.TextMessage;
 import com.koenig.communication.messages.UserMessage;
 
 import org.slf4j.Logger;
@@ -18,9 +19,9 @@ import java.nio.ByteBuffer;
 public class Parser {
     protected static Logger logger = LoggerFactory.getLogger("Parser");
     public static FamilyMessage parse(ByteBuffer buffer) {
-        String name = MessageConverter.byteToString(buffer);
-        String fromId = MessageConverter.byteToString(buffer);
-        String toId = MessageConverter.byteToString(buffer);
+        String name = BinaryConverter.byteToString(buffer);
+        String fromId = BinaryConverter.byteToString(buffer);
+        String toId = BinaryConverter.byteToString(buffer);
         //DateTime timestamp = new DateTime(buffer.getLong());
 
         FamilyMessage msg = null;

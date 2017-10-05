@@ -1,7 +1,7 @@
 package com.koenig.communication.messages;
 
 
-import com.koenig.communication.MessageConverter;
+import com.koenig.BinaryConverter;
 
 import java.nio.ByteBuffer;
 
@@ -25,7 +25,7 @@ public class UserMessage extends FamilyMessage {
         int size = buffer.getShort();
         names = new String[size];
         for (int i = 0; i < size; i++) {
-            names[i] = MessageConverter.byteToString(buffer);
+            names[i] = BinaryConverter.byteToString(buffer);
         }
     }
 
@@ -43,7 +43,7 @@ public class UserMessage extends FamilyMessage {
         int size = 0;
         for(String name: names)
         {
-            size += name.length() + MessageConverter.stringLengthSize;
+            size += name.length() + BinaryConverter.stringLengthSize;
         }
         return 2 + size;
     }
@@ -53,7 +53,7 @@ public class UserMessage extends FamilyMessage {
         ByteBuffer byteBuffer = ByteBuffer.allocate(getContentLength());
         byteBuffer.putShort((short) names.length);
         for(String name:names) {
-            byteBuffer.put(MessageConverter.stringToByte(name));
+            byteBuffer.put(BinaryConverter.stringToByte(name));
         }
 
         return byteBuffer.array();

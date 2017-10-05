@@ -1,9 +1,7 @@
 package com.koenig.communication.messages;
 
 
-import com.koenig.communication.MessageConverter;
-
-import org.joda.time.DateTime;
+import com.koenig.BinaryConverter;
 
 import java.nio.ByteBuffer;
 
@@ -25,7 +23,7 @@ public class TextMessage extends FamilyMessage {
     public TextMessage(String fromId, String toId, ByteBuffer buffer) {
         this.fromId = fromId;
         this.toId = toId;
-        this.text = MessageConverter.byteToString(buffer);
+        this.text = BinaryConverter.byteToString(buffer);
     }
 
     public String getText() {
@@ -38,14 +36,14 @@ public class TextMessage extends FamilyMessage {
 
     @Override
     protected int getContentLength() {
-        return text.length() + MessageConverter.stringLengthSize;
+        return text.length() + BinaryConverter.stringLengthSize;
     }
 
     @Override
     protected byte[] contentToByte() {
 
         ByteBuffer buffer = ByteBuffer.allocate(getContentLength());
-        buffer.put(MessageConverter.stringToByte(text));
+        buffer.put(BinaryConverter.stringToByte(text));
         return buffer.array();
     }
 
