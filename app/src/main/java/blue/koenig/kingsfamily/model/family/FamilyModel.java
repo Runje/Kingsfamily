@@ -27,18 +27,11 @@ import blue.koenig.kingsfamily.presenter.family.FamilyPresenterListener;
  */
 
 public class FamilyModel implements FamilyPresenterListener, ConnectionEventListener {
-    private Logger logger = LoggerFactory.getLogger(getClass().getSimpleName());
-
     ServerConnection connection;
+    private Logger logger = LoggerFactory.getLogger(getClass().getSimpleName());
     private Context context;
-
-    public FamilyPresenter getPresenter() {
-        return presenter;
-    }
-
     private FamilyPresenter presenter;
     private ScheduledExecutorService service;
-
     @Inject
     public FamilyModel(ServerConnection connection, Context context, FamilyPresenter presenter) {
         this.connection = connection;
@@ -46,6 +39,10 @@ public class FamilyModel implements FamilyPresenterListener, ConnectionEventList
         this.presenter = presenter;
 
         connection.setOnConnectionEventListener(this);
+    }
+
+    public FamilyPresenter getPresenter() {
+        return presenter;
     }
 
     public void start() {
@@ -94,7 +91,7 @@ public class FamilyModel implements FamilyPresenterListener, ConnectionEventList
 
     @Override
     public void createFamily(String name) {
-        connection.sendFamilyMessage(new TextMessage(Commands.CREATE_FAMILY + name));
+        connection.sendFamilyMessage(FamilyMessage.CreateFamilyMessage(name, FamilyConfig.getUsername(context)));
     }
 
     @Override
@@ -122,7 +119,7 @@ public class FamilyModel implements FamilyPresenterListener, ConnectionEventList
     }
 
     private void processCommand(String command) {
-        String[] words = command.split(" ");
+        String[] words = command.split(FamilyMessage.SEPARATOR);
         switch (words[0]){
             case Commands.LOGIN_FAIL:
                 logger.error("Login failed");

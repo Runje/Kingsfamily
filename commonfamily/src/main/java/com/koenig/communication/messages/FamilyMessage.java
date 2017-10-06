@@ -4,6 +4,7 @@ package com.koenig.communication.messages;
 
 import com.example.Message;
 import com.koenig.BinaryConverter;
+import com.koenig.communication.Commands;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +17,14 @@ import java.nio.ByteBuffer;
 
 public abstract class FamilyMessage implements Message {
     public static final String ServerId = "KOENIGSPUTZ_SERVER_ID";
+    public static final String SEPARATOR = ";";
     protected Logger logger = LoggerFactory.getLogger(getClass().getSimpleName());
     protected String fromId;
     protected String toId;
+
+    public static FamilyMessage CreateFamilyMessage(String familyName, String userName) {
+        return new TextMessage(Commands.CREATE_FAMILY + SEPARATOR + familyName + SEPARATOR + userName);
+    }
 
     public abstract String getName();
 
