@@ -3,6 +3,7 @@ package com.koenig.communication;
 
 import com.koenig.BinaryConverter;
 import com.koenig.communication.messages.AskForUserMessage;
+import com.koenig.communication.messages.CreateUserMessage;
 import com.koenig.communication.messages.FamilyMessage;
 import com.koenig.communication.messages.TextMessage;
 import com.koenig.communication.messages.UserMessage;
@@ -37,6 +38,10 @@ public class Parser {
 
             case UserMessage.NAME:
                 msg = new UserMessage(fromId, toId, buffer);
+                break;
+
+            case CreateUserMessage.NAME:
+                msg = new CreateUserMessage(fromId, toId, buffer);
                 break;
 
             default:

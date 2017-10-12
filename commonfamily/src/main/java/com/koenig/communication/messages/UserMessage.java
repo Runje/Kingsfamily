@@ -61,6 +61,6 @@ public class UserMessage extends FamilyMessage {
 
     @Override
     public String toString() {
-        return "AskForUserMessage{}";
+        return "UserMessage{}";
     }
 }

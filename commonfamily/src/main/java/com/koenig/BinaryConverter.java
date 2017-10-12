@@ -4,6 +4,8 @@ package com.koenig;
 import com.koenig.commonModel.Component;
 import com.koenig.commonModel.Permission;
 
+import org.joda.time.DateTime;
+
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
@@ -18,10 +20,8 @@ public class BinaryConverter
     public static final int sizeLength = 4;
     public static final String encoding = "ISO-8859-1";
     public static final int idLength = 36;
+    public static final int dateTimeLength = 8;
     public static int stringLengthSize = 2;
-    public static int maxSizeComponent = 11;
-    public static int maxSizePermission = 16;
-    private static int DatabaseItemLength = 4 + 4 + 72 + 16 + 1;
 
     public static byte[] stringToByte(String string)
     {
@@ -113,4 +113,13 @@ public class BinaryConverter
         return Permission.valueOf(byteToString(buffer));
     }
 
+    public static DateTime getDateTime(ByteBuffer buffer) {
+        return new DateTime(buffer.getLong());
+    }
+
+    public static byte[] dateTimeToBytes(DateTime dateTime) {
+        ByteBuffer buffer = ByteBuffer.allocate(8);
+        buffer.putLong(dateTime.getMillis());
+        return buffer.array();
+    }
 }

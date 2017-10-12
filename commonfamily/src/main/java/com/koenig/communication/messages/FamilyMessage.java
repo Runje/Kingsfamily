@@ -22,8 +22,12 @@ public abstract class FamilyMessage implements Message {
     protected String fromId;
     protected String toId;
 
-    public static FamilyMessage CreateFamilyMessage(String familyName, String userName) {
-        return new TextMessage(Commands.CREATE_FAMILY + SEPARATOR + familyName + SEPARATOR + userName);
+    public static FamilyMessage CreateFamilyMessage(String familyName) {
+        return new TextMessage(Commands.CREATE_FAMILY + SEPARATOR + familyName);
+    }
+
+    public static FamilyMessage JoinFamilyMessage(String familyName) {
+        return new TextMessage(Commands.JOIN_FAMILY + SEPARATOR + familyName);
     }
 
     public abstract String getName();

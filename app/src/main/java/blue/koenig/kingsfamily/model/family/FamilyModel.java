@@ -86,12 +86,13 @@ public class FamilyModel implements FamilyPresenterListener, ConnectionEventList
 
     @Override
     public void onCreatingUser(String name) {
+        // TODO: create user first
         presenter.joinOrCreateFamily();
     }
 
     @Override
     public void createFamily(String name) {
-        connection.sendFamilyMessage(FamilyMessage.CreateFamilyMessage(name, FamilyConfig.getUsername(context)));
+        connection.sendFamilyMessage(FamilyMessage.CreateFamilyMessage(name));
     }
 
     @Override
