@@ -40,4 +40,7 @@ dependencies {
     //compile 'org.slf4j:slf4j-android:1.6.1-RC1'
     compile 'org.slf4j:slf4j-android:1.7.22'
     compile files('../../Utilties/tcpcommunication/build/libs/tcpcommunication.jar')
+    compile 'com.android.support.constraint:constraint-layout:1.0.1'
+    compile 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 }

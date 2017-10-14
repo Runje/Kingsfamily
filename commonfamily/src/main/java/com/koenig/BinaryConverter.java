@@ -3,6 +3,7 @@ package com.koenig;
 
 import com.koenig.commonModel.Component;
 import com.koenig.commonModel.Permission;
+import com.koenig.commonModel.User;
 
 import org.joda.time.DateTime;
 
@@ -65,13 +66,7 @@ public class BinaryConverter
 
     public static byte[] permissionsToBytes(Map<Component, Permission> permissions) {
 
-        short size = 2;
-        for (Map.Entry<Component, Permission> entry : permissions.entrySet()) {
-            Component component = entry.getKey();
-            Permission permission = entry.getValue();
-            size += component.toString().length() + 2;
-            size += permission.toString().length() + 2;
-        }
+        short size = getPermissionLength(permissions);
         ByteBuffer buffer = ByteBuffer.allocate(size);
         buffer.putShort((short) permissions.size());
         for (Map.Entry<Component, Permission> entry : permissions.entrySet()) {
@@ -113,7 +108,7 @@ public class BinaryConverter
         return Permission.valueOf(byteToString(buffer));
     }
 
-    public static DateTime getDateTime(ByteBuffer buffer) {
+    public static DateTime byteToDateTime(ByteBuffer buffer) {
         return new DateTime(buffer.getLong());
     }
 
@@ -121,5 +116,44 @@ public class BinaryConverter
         ByteBuffer buffer = ByteBuffer.allocate(8);
         buffer.putLong(dateTime.getMillis());
         return buffer.array();
+    }
+
+    public static User byteToUser(ByteBuffer buffer) {
+        String name = byteToString(buffer);
+        String family = byteToString(buffer);
+        String id = byteToString(buffer);
+        DateTime birthday = byteToDateTime(buffer);
+        HashMap<Component, Permission> permission = bytesToPermissions(buffer);
+        return new User(id, name, family, birthday, permission);
+    }
+
+    public static byte[] userToBytes(User user) {
+        int size = getUserLength(user);
+        ByteBuffer buffer = ByteBuffer.allocate(size);
+        buffer.put(stringToByte(user.getName()));
+        buffer.put(stringToByte(user.getFamily()));
+        buffer.put(stringToByte(user.getId()));
+        buffer.put(dateTimeToBytes(user.getBirthday()));
+        buffer.put(permissionsToBytes(user.getPermissions()));
+        return buffer.array();
+    }
+
+    public static int getUserLength(User user) {
+        return getStringLength(user.getName()) + getStringLength(user.getFamily()) + getStringLength(user.getId()) + dateTimeLength + getPermissionLength(user.getPermissions());
+    }
+
+    private static short getPermissionLength(Map<Component, Permission> permissions) {
+        short size = 2;
+        for (Map.Entry<Component, Permission> entry : permissions.entrySet()) {
+            Component component = entry.getKey();
+            Permission permission = entry.getValue();
+            size += component.toString().length() + 2;
+            size += permission.toString().length() + 2;
+        }
+        return size;
+    }
+
+    private static int getStringLength(String name) {
+        return name.length() + stringLengthSize;
     }
 }

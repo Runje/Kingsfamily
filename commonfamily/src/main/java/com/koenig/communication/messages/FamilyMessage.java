@@ -30,6 +30,10 @@ public abstract class FamilyMessage implements Message {
         return new TextMessage(Commands.JOIN_FAMILY + SEPARATOR + familyName);
     }
 
+    public static FamilyMessage CreateLoginMessage() {
+        return new TextMessage(Commands.LOGIN);
+    }
+
     public abstract String getName();
 
     public int getTotalLength()

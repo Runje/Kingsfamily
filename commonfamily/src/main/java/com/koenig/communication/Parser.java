@@ -7,6 +7,7 @@ import com.koenig.communication.messages.CreateUserMessage;
 import com.koenig.communication.messages.FamilyMessage;
 import com.koenig.communication.messages.TextMessage;
 import com.koenig.communication.messages.UserMessage;
+import com.koenig.communication.messages.UsersMessage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,12 +37,16 @@ public class Parser {
                 msg = new AskForUserMessage(fromId, toId, buffer);
                 break;
 
-            case UserMessage.NAME:
-                msg = new UserMessage(fromId, toId, buffer);
+            case UsersMessage.NAME:
+                msg = new UsersMessage(fromId, toId, buffer);
                 break;
 
             case CreateUserMessage.NAME:
                 msg = new CreateUserMessage(fromId, toId, buffer);
+                break;
+
+            case UserMessage.NAME:
+                msg = new UserMessage(fromId, toId, buffer);
                 break;
 
             default:

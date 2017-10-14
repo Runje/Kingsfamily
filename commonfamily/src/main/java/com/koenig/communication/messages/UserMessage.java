@@ -1,36 +1,33 @@
 package com.koenig.communication.messages;
 
-
 import com.koenig.BinaryConverter;
+import com.koenig.commonModel.User;
 
 import java.nio.ByteBuffer;
 
 /**
- * Created by Thomas on 11.01.2017.
+ * Created by Thomas on 11.10.2017.
  */
 
 public class UserMessage extends FamilyMessage {
 
     public static final String NAME = "UserMessage";
 
-    private String[] names;
-    public UserMessage(String[] names) {
-        this.names = names;
+    private User user;
+
+
+    public UserMessage(User user) {
+        this.user = user;
     }
 
     public UserMessage(String fromId, String toId, ByteBuffer buffer) {
         this.fromId = fromId;
         this.toId = toId;
-
-        int size = buffer.getShort();
-        names = new String[size];
-        for (int i = 0; i < size; i++) {
-            names[i] = BinaryConverter.byteToString(buffer);
-        }
+        user = BinaryConverter.byteToUser(buffer);
     }
 
-    public String[] getNames() {
-        return names;
+    public User getUser() {
+        return user;
     }
 
     public String getName() {
@@ -40,27 +37,20 @@ public class UserMessage extends FamilyMessage {
 
     @Override
     protected int getContentLength() {
-        int size = 0;
-        for(String name: names)
-        {
-            size += name.length() + BinaryConverter.stringLengthSize;
-        }
-        return 2 + size;
+        return BinaryConverter.getUserLength(user);
     }
 
     @Override
     protected byte[] contentToByte() {
         ByteBuffer byteBuffer = ByteBuffer.allocate(getContentLength());
-        byteBuffer.putShort((short) names.length);
-        for(String name:names) {
-            byteBuffer.put(BinaryConverter.stringToByte(name));
-        }
-
+        byteBuffer.put(BinaryConverter.userToBytes(user));
         return byteBuffer.array();
     }
 
     @Override
     public String toString() {
-        return "UserMessage{}";
+        return "UserMessage{" +
+                "user=" + user +
+                '}';
     }
 }

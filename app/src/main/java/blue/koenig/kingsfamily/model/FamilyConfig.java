@@ -7,7 +7,6 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-
 import static android.content.Context.MODE_PRIVATE;
 
 /**
@@ -20,11 +19,10 @@ public class FamilyConfig {
     public static final String FAMILYNAME = "FAMILYNAME";
     public static final String NO_NAME = "NO_NAME";
     public static final DateTimeFormatter DATE_FORMAT = DateTimeFormat.forPattern("dd.MM.YY");
+    public static final String NEVER = "-";
     private static final String LAST_SYNC_DATE = "LASTSYNCDATE";
     private static final long NO_DATE_LONG = 0;
-    private static final DateTime NO_DATE = new DateTime(NO_DATE_LONG);
-    private static final String NEVER = "-";
-
+    public static final DateTime NO_DATE = new DateTime(NO_DATE_LONG);
     private static String username = "";
     private static String familyname = "";
 
@@ -49,7 +47,7 @@ public class FamilyConfig {
      */
     public static void saveUsername(String nameToSave, Context context) {
         SharedPreferences preferences = context.getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
-        preferences.edit().putString(USERNAME, nameToSave).commit();
+        preferences.edit().putString(USERNAME, nameToSave).apply();
         username = nameToSave;
     }
 

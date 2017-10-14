@@ -4,9 +4,9 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="Name">Name</string>
-    <string name="enter_name_or_import">Namen eingeben oder Daten importieren</string>
+    <string name="enter_name_or_id">Namen eingeben oder Id von bestehendem Benutzer eingeben</string>
     <string name="ok">OK</string>
-    <string name="import_file">Datei importieren</string>
+    <string name="import_user">Benutzer importieren</string>
     <string name="enter_name">Bitte einen Namen eingeben</string>
     <string name="not_implemented">NOCH NICHT IMPLEMENTIERT</string>
     <string name="clean_plan">Putzplan</string>
@@ -29,7 +29,7 @@
     <string name="cancel">Abbrechen</string>
     <string name="execution">Ausführung</string>
     <string name="not_connected">Keine Verbindung</string>
-    <string name="connected">Verbindung</string>
+    <string name="connected">Verbunden</string>
     <string name="overview">Übersicht</string>
     <string name="template">Vorlage</string>
     <string name="statistic">Statistik</string>
@@ -41,7 +41,17 @@
     <string name="daily">Täglich</string>
     <string name="yesterday">Gestern</string>
     <string name="createFamily">Neue Familie gründen</string>
-    <string name="Hello">Hallo</string>
-    <string name="createdNewFamily">Neue Familie gegründet:</string>
+    <string name="hello">Hallo %s</string>
+    <string name="createdNewFamily">Neue Familie gegründet: %s</string>
     <string name="joinFamily">Familie beitreten</string>
+    <string name="login_failed">Login fehlgeschlagen</string>
+    <string name="family_already_exists">Familie existiert bereits</string>
+    <string name="joinedFamily">Familie beigetreten: %s</string>
+    <string name="family_doesnt_exists">Familie existiert nicht</string>
+    <string name="create_user">Neuen Benutzer erstellen</string>
+    <string name="birthday">Geburtstag</string>
+    <string name="name">Name</string>
+    <string name="user_id">Benutzer ID</string>
+    <string name="create_user_failed">Benutzer konnte nicht erstellt werden</string>
+    <string name="create_user_success">Benutzer erfolgreich erstellt</string>
 </resources>

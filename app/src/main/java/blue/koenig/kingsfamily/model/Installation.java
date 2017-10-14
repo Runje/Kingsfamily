@@ -50,4 +50,17 @@ public class Installation
         out.write(id.getBytes());
         out.close();
     }
+
+    public static void setId(Context context, String userId) {
+        File installation = new File(context.getFilesDir(), INSTALLATION);
+        try {
+            FileOutputStream out = new FileOutputStream(installation);
+            String id = userId;
+            out.write(id.getBytes());
+            out.close();
+            sID = userId;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

@@ -2,7 +2,7 @@ package blue.koenig.kingsfamily.dagger;
 
 import javax.inject.Singleton;
 
-import blue.koenig.kingsfamily.view.family.MainActivity;
+import blue.koenig.kingsfamily.view.family.LoginActivity;
 import dagger.Component;
 
 /**
@@ -11,5 +11,5 @@ import dagger.Component;
 @Singleton
 @Component(modules = {AppModule.class, ConnectionModule.class, InstallationModule.class})
 public interface AppComponent {
-    void inject(MainActivity target);
+    void inject(LoginActivity target);
 }

@@ -26,7 +26,7 @@ public class CreateUserMessage extends FamilyMessage {
         this.fromId = fromId;
         this.toId = toId;
         userName = BinaryConverter.byteToString(buffer);
-        birthday = BinaryConverter.getDateTime(buffer);
+        birthday = BinaryConverter.byteToDateTime(buffer);
     }
 
     public String getUserName() {
