@@ -1,1 +1,1 @@
-include ':app', ':commonfamily'
+include ':app', ':commonfamily', ':kingsfamilylibrary'

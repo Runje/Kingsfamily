@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/Kingsfamily.iml" filepath="$PROJECT_DIR$/Kingsfamily.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/commonfamily/commonfamily.iml" filepath="$PROJECT_DIR$/commonfamily/commonfamily.iml" />
+      <module fileurl="file://$PROJECT_DIR$/kingsfamilylibrary/kingsfamilylibrary.iml" filepath="$PROJECT_DIR$/kingsfamilylibrary/kingsfamilylibrary.iml" />
     </modules>
   </component>
 </project>
