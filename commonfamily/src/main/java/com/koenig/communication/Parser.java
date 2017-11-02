@@ -1,13 +1,14 @@
 package com.koenig.communication;
 
 
-import com.koenig.BinaryConverter;
-import com.koenig.communication.messages.AskForUserMessage;
-import com.koenig.communication.messages.CreateUserMessage;
+import com.koenig.commonModel.Byteable;
+import com.koenig.commonModel.Component;
 import com.koenig.communication.messages.FamilyMessage;
 import com.koenig.communication.messages.TextMessage;
-import com.koenig.communication.messages.UserMessage;
-import com.koenig.communication.messages.UsersMessage;
+import com.koenig.communication.messages.family.CreateUserMessage;
+import com.koenig.communication.messages.family.FamilyMemberMessage;
+import com.koenig.communication.messages.family.UserMessage;
+import com.koenig.communication.messages.finance.ExpensesMessage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,32 +22,33 @@ import java.nio.ByteBuffer;
 public class Parser {
     protected static Logger logger = LoggerFactory.getLogger("Parser");
     public static FamilyMessage parse(ByteBuffer buffer) {
-        String name = BinaryConverter.byteToString(buffer);
-        String fromId = BinaryConverter.byteToString(buffer);
-        String toId = BinaryConverter.byteToString(buffer);
+        int version = buffer.getInt();
+        Component component = Component.read(buffer);
+        String name = Byteable.byteToString(buffer);
+        String fromId = Byteable.byteToString(buffer);
+        String toId = Byteable.byteToString(buffer);
         //DateTime timestamp = new DateTime(buffer.getLong());
 
         FamilyMessage msg = null;
         switch(name)
         {
             case TextMessage.NAME:
-                msg = new TextMessage(fromId, toId, buffer);
+                msg = new TextMessage(version, component, fromId, toId, buffer);
                 break;
 
-            case AskForUserMessage.NAME:
-                msg = new AskForUserMessage(fromId, toId, buffer);
-                break;
-
-            case UsersMessage.NAME:
-                msg = new UsersMessage(fromId, toId, buffer);
+            case FamilyMemberMessage.NAME:
+                msg = new FamilyMemberMessage(version, component, fromId, toId, buffer);
                 break;
 
             case CreateUserMessage.NAME:
-                msg = new CreateUserMessage(fromId, toId, buffer);
+                msg = new CreateUserMessage(version, component, fromId, toId, buffer);
                 break;
 
             case UserMessage.NAME:
-                msg = new UserMessage(fromId, toId, buffer);
+                msg = new UserMessage(version, component, fromId, toId, buffer);
+                break;
+            case ExpensesMessage.NAME:
+                msg = new ExpensesMessage(version, component, fromId, toId, buffer);
                 break;
 
             default:

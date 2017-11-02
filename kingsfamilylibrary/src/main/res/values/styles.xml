@@ -8,6 +8,30 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:textViewStyle">@style/NormalText</item>
+        <item name="android:windowBackground">@color/background</item>
+        <item name="android:imageButtonStyle">@style/Icon</item>
+    </style>
+
+    <style name="NormalText" parent="@android:style/TextAppearance.DeviceDefault.Medium">
+        <item name="android:textColor">@color/normalText</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="LinearLayoutNormalText" parent="NormalText">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="Heading" parent="@android:style/TextAppearance.DeviceDefault.Large">
+        <item name="android:textColor">@color/normalText</item>
+    </style>
+
+    <style name="Icon" parent="Widget.AppCompat.ImageButton">
+        <item name="android:tint">@color/colorAccent</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="background">@android:color/transparent</item>
     </style>
 
 </resources>

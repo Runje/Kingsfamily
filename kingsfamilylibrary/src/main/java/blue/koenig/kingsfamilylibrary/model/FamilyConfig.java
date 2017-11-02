@@ -37,7 +37,7 @@ public class FamilyConfig {
             Context familyContext = context.createPackageContext(context.getString(R.string.family_uri), Context.CONTEXT_IGNORE_SECURITY);
             return familyContext.getSharedPreferences(SHARED_PREF, MODE_WORLD_WRITEABLE);
         } catch (PackageManager.NameNotFoundException e) {
-            logger.error("Family app is not installed");
+            logger.error("FAMILY app is not installed");
 
             // TODO: either the app must be installed or store userId in own shared preferences!?
             return null;
@@ -63,9 +63,21 @@ public class FamilyConfig {
      * @param context
      */
     public static void saveUserId(String userId, Context context) {
+        logger.info("Setting user id to " + userId);
         SharedPreferences preferences = getSharedPreferencesBetweenApps(context);
         preferences.edit().putString(USERID, userId).apply();
         FamilyConfig.userId = userId;
+    }
+
+    public static String getAbbreviationFor(String userName, Context context) {
+        SharedPreferences preferences = getSharedPreferencesBetweenApps(context);
+        return preferences.getString(userName, userName.substring(0, 1));
+    }
+
+    public static void setAbbreviationFor(String userName, String abbreviation, Context context) {
+        SharedPreferences preferences = getSharedPreferencesBetweenApps(context);
+        preferences.edit().putString(userName, abbreviation).apply();
+
     }
 
 

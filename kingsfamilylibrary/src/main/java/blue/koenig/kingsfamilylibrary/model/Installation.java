@@ -2,6 +2,9 @@ package blue.koenig.kingsfamilylibrary.model;
 
 import android.content.Context;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -14,6 +17,7 @@ import java.util.UUID;
 public class Installation
 {
     private static final String INSTALLATION = "INSTALLATION";
+    protected static Logger logger = LoggerFactory.getLogger("Installation");
     private static String sID = null;
 
     public synchronized static String id(Context context)
@@ -47,11 +51,13 @@ public class Installation
     {
         FileOutputStream out = new FileOutputStream(installation);
         String id = UUID.randomUUID().toString();
+        logger.info("New installation id: " + id);
         out.write(id.getBytes());
         out.close();
     }
 
     public static void setId(Context context, String userId) {
+        logger.info("Setting installation id to " + userId);
         File installation = new File(context.getFilesDir(), INSTALLATION);
         try {
             FileOutputStream out = new FileOutputStream(installation);

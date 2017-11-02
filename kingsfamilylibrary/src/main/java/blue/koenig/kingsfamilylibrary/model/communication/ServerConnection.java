@@ -12,18 +12,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Thomas on 08.01.2017.
  */
 public class ServerConnection extends SocketChannelTCPClient implements OnConnectionChangedListener, OnReceiveBytesListener {
     private Logger logger = LoggerFactory.getLogger(getClass().getSimpleName());
-    private ConnectionEventListener connectionEventListener;
+    private List<ConnectionEventListener> connectionEventListeners;
     private String fromId;
 
     public ServerConnection(String fromId) {
         super(ConnectUtils.PORT, ConnectUtils.SERVER_IP);
         this.fromId = fromId;
+        connectionEventListeners = new ArrayList<>();
         addOnConnectionChangedListener(this);
         addOnReceiveBytesListener(this);
     }
@@ -39,7 +42,7 @@ public class ServerConnection extends SocketChannelTCPClient implements OnConnec
 
     @Override
     public void connect() {
-        logger.info("Trying to connect...");
+        logger.trace("Trying to connect...");
         tryConnect();
     }
 
@@ -48,22 +51,24 @@ public class ServerConnection extends SocketChannelTCPClient implements OnConnec
         super.disconnect();
     }
 
-    public void setOnConnectionEventListener(ConnectionEventListener connectionEventListener) {
-        this.connectionEventListener = connectionEventListener;
+    public void addOnConnectionEventListener(ConnectionEventListener connectionEventListener) {
+        this.connectionEventListeners.add(connectionEventListener);
     }
 
     public void sendFamilyMessage(FamilyMessage msg) {
         msg.setFromId(fromId);
         msg.setToId(FamilyMessage.ServerId);
         super.sendMessage(msg);
+        logger.info("Sent message " + msg.getName());
     }
 
     @Override
     public void onConnectionChanged(boolean b) {
-        if (connectionEventListener != null)
-        {
+        logger.info("ConnectionChanged: " + b);
+        for (ConnectionEventListener connectionEventListener : connectionEventListeners) {
             connectionEventListener.onConnectionStatusChange(b);
         }
+
     }
 
     @Override
@@ -73,10 +78,10 @@ public class ServerConnection extends SocketChannelTCPClient implements OnConnec
         FamilyMessage msg = Parser.parse(ByteBuffer.wrap(bytes));
 
         logger.info(msg.toString());
-        if (connectionEventListener != null)
-        {
+        for (ConnectionEventListener connectionEventListener : connectionEventListeners) {
             connectionEventListener.onReceiveMessage(msg);
         }
+
     }
 
 

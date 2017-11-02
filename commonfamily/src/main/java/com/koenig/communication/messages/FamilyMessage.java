@@ -3,8 +3,8 @@ package com.koenig.communication.messages;
 
 
 import com.example.Message;
-import com.koenig.BinaryConverter;
-import com.koenig.communication.Commands;
+import com.koenig.commonModel.Byteable;
+import com.koenig.commonModel.Component;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,27 +18,26 @@ import java.nio.ByteBuffer;
 public abstract class FamilyMessage implements Message {
     public static final String ServerId = "KOENIGSPUTZ_SERVER_ID";
     public static final String SEPARATOR = ";";
+    private static final int VERSION_NUMBER = 1;
     protected Logger logger = LoggerFactory.getLogger(getClass().getSimpleName());
     protected String fromId;
     protected String toId;
+    protected Component component;
+    protected int version;
 
-    public static FamilyMessage CreateFamilyMessage(String familyName) {
-        return new TextMessage(Commands.CREATE_FAMILY + SEPARATOR + familyName);
+    public FamilyMessage(Component component) {
+        this.component = component;
+        this.version = VERSION_NUMBER;
     }
 
-    public static FamilyMessage JoinFamilyMessage(String familyName) {
-        return new TextMessage(Commands.JOIN_FAMILY + SEPARATOR + familyName);
-    }
 
-    public static FamilyMessage CreateLoginMessage() {
-        return new TextMessage(Commands.LOGIN);
-    }
 
     public abstract String getName();
 
     public int getTotalLength()
     {
-        int length = BinaryConverter.sizeLength + 2 + getName().length() + 2 + fromId.length() + 2 + toId.length() + getContentLength();
+        int length = 4 + 4 + component.getBytesLength() + Byteable.getStringLength(getName()) + Byteable.getStringLength(fromId) + Byteable.getStringLength(toId)
+                + getContentLength();
         return length;
     }
 
@@ -56,6 +55,14 @@ public abstract class FamilyMessage implements Message {
         this.fromId = fromId;
     }
 
+    public Component getComponent() {
+        return component;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
     public String getToId()
     {
         return toId;
@@ -68,9 +75,11 @@ public abstract class FamilyMessage implements Message {
 
     protected void headerToBuffer(ByteBuffer buffer) {
         buffer.putInt(getTotalLength());
-        buffer.put(BinaryConverter.stringToByte(getName()));
-        buffer.put(BinaryConverter.stringToByte(fromId));
-        buffer.put(BinaryConverter.stringToByte(toId));
+        buffer.putInt(version);
+        buffer.put(component.toBytes());
+        buffer.put(Byteable.stringToByte(getName()));
+        buffer.put(Byteable.stringToByte(fromId));
+        buffer.put(Byteable.stringToByte(toId));
     }
 
     public ByteBuffer getBuffer()

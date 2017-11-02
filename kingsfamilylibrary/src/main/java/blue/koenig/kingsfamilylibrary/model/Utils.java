@@ -5,6 +5,8 @@ import android.content.pm.PackageManager;
 
 import org.joda.time.DateTime;
 
+import blue.koenig.kingsfamilylibrary.model.communication.ServerConnection;
+
 /**
  * Created by Thomas on 13.10.2017.
  */
@@ -36,5 +38,11 @@ public class Utils {
         }
 
         return false;
+    }
+
+    public static void setUserId(ServerConnection connection, Context context, String userId) {
+        Installation.setId(context, userId);
+        FamilyConfig.saveUserId(userId, context);
+        connection.setFromId(userId);
     }
 }

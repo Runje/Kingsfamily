@@ -1,7 +1,8 @@
 package com.koenig.communication.messages;
 
 
-import com.koenig.BinaryConverter;
+import com.koenig.commonModel.Byteable;
+import com.koenig.commonModel.Component;
 
 import java.nio.ByteBuffer;
 
@@ -16,14 +17,17 @@ public class TextMessage extends FamilyMessage {
 
     String text;
 
-    public TextMessage(String text) {
+    public TextMessage(Component component, String text) {
+        super(component);
         this.text = text;
     }
 
-    public TextMessage(String fromId, String toId, ByteBuffer buffer) {
+    public TextMessage(int version, Component component, String fromId, String toId, ByteBuffer buffer) {
+        super(component);
+        this.version = version;
         this.fromId = fromId;
         this.toId = toId;
-        this.text = BinaryConverter.byteToString(buffer);
+        this.text = Byteable.byteToString(buffer);
     }
 
     public String getText() {
@@ -36,14 +40,14 @@ public class TextMessage extends FamilyMessage {
 
     @Override
     protected int getContentLength() {
-        return text.length() + BinaryConverter.stringLengthSize;
+        return Byteable.getStringLength(text);
     }
 
     @Override
     protected byte[] contentToByte() {
 
         ByteBuffer buffer = ByteBuffer.allocate(getContentLength());
-        buffer.put(BinaryConverter.stringToByte(text));
+        buffer.put(Byteable.stringToByte(text));
         return buffer.array();
     }
 

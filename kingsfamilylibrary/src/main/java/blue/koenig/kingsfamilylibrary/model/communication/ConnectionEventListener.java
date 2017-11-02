@@ -7,5 +7,12 @@ import com.koenig.communication.messages.FamilyMessage;
  */
 public interface ConnectionEventListener {
     void onConnectionStatusChange(boolean connected);
+
+    /**
+     * Is called whenever a message is received.
+     *
+     * @param message FamilyMessage
+     * @return If the message is consumed
+     */
     void onReceiveMessage(FamilyMessage message);
 }

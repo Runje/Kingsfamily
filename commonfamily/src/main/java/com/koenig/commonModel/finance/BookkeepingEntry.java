@@ -1,0 +1,116 @@
+package com.koenig.commonModel.finance;
+
+import com.koenig.commonModel.Item;
+
+import java.nio.ByteBuffer;
+
+/**
+ * Created by Thomas on 21.10.2017.
+ */
+
+public class BookkeepingEntry extends Item {
+
+    // userId --> costs
+    public CostDistribution costDistribution;
+    private int costs;
+    private String name;
+    private String category;
+    private String subCategory;
+
+
+    public BookkeepingEntry(String name, String category, String subCategory, int costs, CostDistribution costDistribution) {
+        this.costs = costs;
+        this.name = name;
+        this.category = category;
+        this.subCategory = subCategory;
+        this.costDistribution = costDistribution;
+    }
+
+    public BookkeepingEntry(BookkeepingEntry entry) {
+        this.costs = entry.costs;
+        this.name = entry.name;
+        this.category = entry.category;
+        this.subCategory = entry.subCategory;
+        this.costDistribution = entry.costDistribution;
+    }
+
+    public BookkeepingEntry(ByteBuffer buffer) {
+        super(buffer);
+        name = byteToString(buffer);
+        category = byteToString(buffer);
+        subCategory = byteToString(buffer);
+        costs = buffer.getInt();
+        costDistribution = new CostDistribution(buffer);
+    }
+
+
+    public int getCosts() {
+        return costs;
+    }
+
+    public void setCosts(int costs) {
+        this.costs = costs;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getSubCategory() {
+        return subCategory;
+    }
+
+    public void setSubCategory(String subCategory) {
+        this.subCategory = subCategory;
+    }
+
+    public CostDistribution getCostDistribution() {
+        return costDistribution;
+    }
+
+    public void setCostDistribution(CostDistribution costDistribution) {
+        this.costDistribution = costDistribution;
+    }
+
+    public boolean costsValid() {
+        return costDistribution.sumReal() == costs;
+    }
+
+    @Override
+    public int getByteLength() {
+        return super.getByteLength() + getStringLength(name) + getStringLength(category) + getStringLength(subCategory) + 4 + costDistribution.getByteLength();
+    }
+
+    @Override
+    public void writeBytes(ByteBuffer buffer) {
+        super.writeBytes(buffer);
+        buffer.put(stringToByte(name));
+        buffer.put(stringToByte(category));
+        buffer.put(stringToByte(subCategory));
+        buffer.putInt(costs);
+        costDistribution.writeBytes(buffer);
+    }
+
+    @Override
+    public String toString() {
+        return "BookkeepingEntry{" +
+                "costs=" + costs +
+                ", name='" + name + '\'' +
+                ", category='" + category + '\'' +
+                ", subCategory='" + subCategory + '\'' +
+                ", costDistribution=" + costDistribution +
+                '}';
+    }
+}

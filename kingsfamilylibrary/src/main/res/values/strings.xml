@@ -31,4 +31,5 @@
     <string name="create_user_failed">Benutzer konnte nicht erstellt werden</string>
     <string name="create_user_success">Benutzer erfolgreich erstellt</string>
     <string name="sharedUserId">blue.koenig.family.shareduser</string>
+    <string name="get_familymembers_fail">Familienmitglieder nicht gefunden</string>
 </resources>

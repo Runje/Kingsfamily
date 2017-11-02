@@ -1,7 +1,8 @@
-package com.koenig.communication.messages;
+package com.koenig.communication.messages.family;
 
-import com.koenig.BinaryConverter;
+import com.koenig.commonModel.Component;
 import com.koenig.commonModel.User;
+import com.koenig.communication.messages.FamilyMessage;
 
 import java.nio.ByteBuffer;
 
@@ -17,13 +18,16 @@ public class UserMessage extends FamilyMessage {
 
 
     public UserMessage(User user) {
+        super(Component.FAMILY);
         this.user = user;
     }
 
-    public UserMessage(String fromId, String toId, ByteBuffer buffer) {
+    public UserMessage(int version, Component component, String fromId, String toId, ByteBuffer buffer) {
+        super(component);
+        this.version = version;
         this.fromId = fromId;
         this.toId = toId;
-        user = BinaryConverter.byteToUser(buffer);
+        user = new User(buffer);
     }
 
     public User getUser() {
@@ -37,13 +41,13 @@ public class UserMessage extends FamilyMessage {
 
     @Override
     protected int getContentLength() {
-        return BinaryConverter.getUserLength(user);
+        return user.getByteLength();
     }
 
     @Override
     protected byte[] contentToByte() {
         ByteBuffer byteBuffer = ByteBuffer.allocate(getContentLength());
-        byteBuffer.put(BinaryConverter.userToBytes(user));
+        user.writeBytes(byteBuffer);
         return byteBuffer.array();
     }
 

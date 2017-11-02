@@ -1,5 +1,6 @@
 package com.koenig.commonModel;
 
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 
 public enum Permission {
@@ -13,6 +14,14 @@ public enum Permission {
         }
 
         return permissions;
+    }
+
+    public static Permission read(ByteBuffer buffer) {
+        return Permission.valueOf(Byteable.byteToString(buffer));
+    }
+
+    public void write(ByteBuffer buffer) {
+        buffer.put(Byteable.stringToByte(name()));
     }
 
 }

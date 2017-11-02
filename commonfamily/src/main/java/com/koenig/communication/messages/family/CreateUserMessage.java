@@ -1,6 +1,8 @@
-package com.koenig.communication.messages;
+package com.koenig.communication.messages.family;
 
-import com.koenig.BinaryConverter;
+import com.koenig.commonModel.Byteable;
+import com.koenig.commonModel.Component;
+import com.koenig.communication.messages.FamilyMessage;
 
 import org.joda.time.DateTime;
 
@@ -18,15 +20,18 @@ public class CreateUserMessage extends FamilyMessage {
     private DateTime birthday;
 
     public CreateUserMessage(String userName, DateTime birthday) {
+        super(Component.FAMILY);
         this.birthday = birthday;
         this.userName = userName;
     }
 
-    public CreateUserMessage(String fromId, String toId, ByteBuffer buffer) {
+    public CreateUserMessage(int version, Component component, String fromId, String toId, ByteBuffer buffer) {
+        super(component);
+        this.version = version;
         this.fromId = fromId;
         this.toId = toId;
-        userName = BinaryConverter.byteToString(buffer);
-        birthday = BinaryConverter.byteToDateTime(buffer);
+        userName = Byteable.byteToString(buffer);
+        birthday = Byteable.byteToDateTime(buffer);
     }
 
     public String getUserName() {
@@ -44,14 +49,14 @@ public class CreateUserMessage extends FamilyMessage {
 
     @Override
     protected int getContentLength() {
-        return BinaryConverter.stringLengthSize + userName.length() + BinaryConverter.dateTimeLength;
+        return Byteable.getStringLength(userName) + Byteable.getDateLength();
     }
 
     @Override
     protected byte[] contentToByte() {
         ByteBuffer byteBuffer = ByteBuffer.allocate(getContentLength());
-        byteBuffer.put(BinaryConverter.stringToByte(userName));
-        byteBuffer.put(BinaryConverter.dateTimeToBytes(birthday));
+        byteBuffer.put(Byteable.stringToByte(userName));
+        byteBuffer.put(Byteable.dateTimeToBytes(birthday));
         return byteBuffer.array();
     }
 
