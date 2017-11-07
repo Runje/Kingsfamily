@@ -37,7 +37,7 @@ public abstract class FamilyModel implements ConnectionEventListener, LoginListe
     protected ServerConnection connection;
     protected List<Plugin> plugins = new ArrayList<>();
     protected FamilyView view = new NullFamilyView();
-    private LoginHandler loginHandler;
+    protected LoginHandler loginHandler;
 
 
     public FamilyModel(ServerConnection connection, Context context, LoginHandler loginHandler) {
@@ -50,7 +50,9 @@ public abstract class FamilyModel implements ConnectionEventListener, LoginListe
 
     }
 
-
+    public List<User> getFamilyMembers() {
+        return loginHandler.getMembers();
+    }
 
     public void onCreatingUser(String name, DateTime birthday) {
         connection.sendFamilyMessage(new CreateUserMessage(name, birthday));
@@ -287,7 +289,7 @@ public abstract class FamilyModel implements ConnectionEventListener, LoginListe
                 start();
             }
         } else {
-            logger.info("Trying to login...");
+            logger.info("Login is already in process...");
         }
     }
 

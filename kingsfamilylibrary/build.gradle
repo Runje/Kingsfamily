@@ -43,6 +43,7 @@ dependencies {
     compile files('../../Utilties/tcpcommunication/build/libs/tcpcommunication.jar')
     compile 'com.android.support.constraint:constraint-layout:1.0.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    compile 'org.jetbrains:annotations-java5:15.0'
 }
 
 

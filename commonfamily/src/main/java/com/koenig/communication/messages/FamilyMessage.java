@@ -30,6 +30,12 @@ public abstract class FamilyMessage implements Message {
         this.version = VERSION_NUMBER;
     }
 
+    public FamilyMessage(int version, Component component, String fromId, String toId) {
+        this.component = component;
+        this.version = version;
+        this.fromId = fromId;
+        this.toId = toId;
+    }
 
 
     public abstract String getName();
@@ -43,7 +49,7 @@ public abstract class FamilyMessage implements Message {
 
     protected abstract int getContentLength();
 
-    protected abstract byte[] contentToByte();
+    protected abstract void writeContent(ByteBuffer buffer);
 
     public String getFromId()
     {
@@ -85,9 +91,8 @@ public abstract class FamilyMessage implements Message {
     public ByteBuffer getBuffer()
     {
         ByteBuffer buffer = ByteBuffer.allocate(getTotalLength());
-
         headerToBuffer(buffer);
-        buffer.put(contentToByte());
+        writeContent(buffer);
         buffer.flip();
         return buffer;
     }

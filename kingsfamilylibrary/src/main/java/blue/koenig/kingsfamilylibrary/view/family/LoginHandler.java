@@ -68,9 +68,12 @@ public class LoginHandler implements ConnectionEventListener {
     public void onConnectionStatusChange(boolean connected) {
         if (!connected) {
             logger.info("Disconnected");
-
+            login = false;
+            loggingIn = false;
         } else {
             logger.info("Connected");
+            login = false;
+            loggingIn = false;
             login();
         }
     }
@@ -96,8 +99,8 @@ public class LoginHandler implements ConnectionEventListener {
 
             case FamilyMemberMessage.NAME:
                 FamilyMemberMessage familyMemberMessage = (FamilyMemberMessage) message;
+                members = familyMemberMessage.getMembers();
                 if (listener != null) {
-                    members = familyMemberMessage.getMembers();
                     listener.onFamilyMembers(familyMemberMessage.getMembers());
                 }
                 login = true;
@@ -125,14 +128,26 @@ public class LoginHandler implements ConnectionEventListener {
 
     public void login() {
         if (loggingIn) {
+            logger.info("Already logging in");
             return;
         }
+
+        if (!connection.isConnected()) {
+            logger.info("Can not login because there is no connection to the server");
+            return;
+        }
+
         logger.info("Login from LoginHandler");
         loggingIn = true;
         String userId = FamilyConfig.getUserId(context);
         if (!userId.equals(FamilyConfig.NO_ID)) {
             Utils.setUserId(connection, context, userId);
             connection.sendFamilyMessage(FamilyTextMessages.loginMessage());
+        } else {
+            logger.info("No id for user found");
+            loggingIn = false;
+            login = false;
+            listener.onLoginFailed();
         }
     }
 

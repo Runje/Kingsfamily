@@ -32,4 +32,7 @@
     <string name="create_user_success">Benutzer erfolgreich erstellt</string>
     <string name="sharedUserId">blue.koenig.family.shareduser</string>
     <string name="get_familymembers_fail">Familienmitglieder nicht gefunden</string>
+    <string name="confirm_delete">Möchten Sie den Eintrag %s wirklich löschen?</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nein</string>
 </resources>

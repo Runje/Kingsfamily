@@ -45,10 +45,8 @@ public class UserMessage extends FamilyMessage {
     }
 
     @Override
-    protected byte[] contentToByte() {
-        ByteBuffer byteBuffer = ByteBuffer.allocate(getContentLength());
+    protected void writeContent(ByteBuffer byteBuffer) {
         user.writeBytes(byteBuffer);
-        return byteBuffer.array();
     }
 
     @Override

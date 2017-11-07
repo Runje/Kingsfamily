@@ -32,6 +32,8 @@
         <item name="android:tint">@color/colorAccent</item>
         <item name="android:background">@android:color/transparent</item>
         <item name="background">@android:color/transparent</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
 </resources>

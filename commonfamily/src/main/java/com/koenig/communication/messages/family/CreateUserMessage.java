@@ -26,10 +26,7 @@ public class CreateUserMessage extends FamilyMessage {
     }
 
     public CreateUserMessage(int version, Component component, String fromId, String toId, ByteBuffer buffer) {
-        super(component);
-        this.version = version;
-        this.fromId = fromId;
-        this.toId = toId;
+        super(version, component, fromId, toId);
         userName = Byteable.byteToString(buffer);
         birthday = Byteable.byteToDateTime(buffer);
     }
@@ -53,11 +50,9 @@ public class CreateUserMessage extends FamilyMessage {
     }
 
     @Override
-    protected byte[] contentToByte() {
-        ByteBuffer byteBuffer = ByteBuffer.allocate(getContentLength());
-        byteBuffer.put(Byteable.stringToByte(userName));
-        byteBuffer.put(Byteable.dateTimeToBytes(birthday));
-        return byteBuffer.array();
+    protected void writeContent(ByteBuffer buffer) {
+        buffer.put(Byteable.stringToByte(userName));
+        buffer.put(Byteable.dateTimeToBytes(birthday));
     }
 
     @Override

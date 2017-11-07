@@ -44,11 +44,8 @@ public class TextMessage extends FamilyMessage {
     }
 
     @Override
-    protected byte[] contentToByte() {
-
-        ByteBuffer buffer = ByteBuffer.allocate(getContentLength());
+    protected void writeContent(ByteBuffer buffer) {
         buffer.put(Byteable.stringToByte(text));
-        return buffer.array();
     }
 
     @Override

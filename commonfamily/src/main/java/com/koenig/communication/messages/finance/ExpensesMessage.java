@@ -56,20 +56,17 @@ public class ExpensesMessage extends FamilyMessage {
     }
 
     @Override
-    protected byte[] contentToByte() {
-        ByteBuffer byteBuffer = ByteBuffer.allocate(getContentLength());
-        byteBuffer.putShort((short) expenses.size());
+    protected void writeContent(ByteBuffer buffer) {
+        buffer.putShort((short) expenses.size());
         for (Expenses expenses : expenses) {
-            expenses.writeBytes(byteBuffer);
+            expenses.writeBytes(buffer);
         }
-
-        return byteBuffer.array();
     }
 
     @Override
     public String toString() {
         return "ExpensesMessage{" +
-                "expenses=" + expenses +
+                "TYPE_EXPENSES=" + expenses +
                 '}';
     }
 }

@@ -20,18 +20,20 @@ public abstract class Byteable {
     }
 
     public static byte[] stringToByte(String string) {
+        ByteBuffer buffer = ByteBuffer.allocate(2 + string.length());
+        writeString(string, buffer);
+        return buffer.array();
+    }
+
+    public static void writeString(String string, ByteBuffer buffer) {
         try {
-            ByteBuffer buffer = ByteBuffer.allocate(2 + string.length());
             if (string.length() > Short.MAX_VALUE) {
                 throw new RuntimeException("String longer than Short.Max_value");
             }
             buffer.putShort((short) string.length());
             buffer.put(string.getBytes(encoding));
-            return buffer.array();
         } catch (UnsupportedEncodingException e) {
-
-            e.printStackTrace();
-            return null;
+            throw new RuntimeException(e.getMessage());
         }
     }
 

@@ -1,6 +1,7 @@
 package com.koenig.communication.messages.finance;
 
 import com.koenig.commonModel.Component;
+import com.koenig.communication.messages.FamilyMessage;
 import com.koenig.communication.messages.TextMessage;
 
 /**
@@ -10,6 +11,7 @@ import com.koenig.communication.messages.TextMessage;
 public class FinanceTextMessages {
     public static final String GET_ALL_EXPENSES = "get_all_expenses";
     public static final String GET_ALL_EXPENSES_FAIL = "get_all_expenses_fail";
+    public static final String AUD_FAIL = "aud_expenses_fail";
 
     public static TextMessage getAllExpensesMessage() {
         return new TextMessage(Component.FINANCE, GET_ALL_EXPENSES);
@@ -17,5 +19,9 @@ public class FinanceTextMessages {
 
     public static TextMessage getAllExpensesMessageFail() {
         return new TextMessage(Component.FINANCE, GET_ALL_EXPENSES_FAIL);
+    }
+
+    public static TextMessage audFailMessage(String operation) {
+        return new TextMessage(Component.FINANCE, AUD_FAIL + FamilyMessage.SEPARATOR + operation);
     }
 }

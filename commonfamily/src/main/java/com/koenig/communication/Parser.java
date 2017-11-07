@@ -3,6 +3,7 @@ package com.koenig.communication;
 
 import com.koenig.commonModel.Byteable;
 import com.koenig.commonModel.Component;
+import com.koenig.communication.messages.AUDMessage;
 import com.koenig.communication.messages.FamilyMessage;
 import com.koenig.communication.messages.TextMessage;
 import com.koenig.communication.messages.family.CreateUserMessage;
@@ -49,6 +50,10 @@ public class Parser {
                 break;
             case ExpensesMessage.NAME:
                 msg = new ExpensesMessage(version, component, fromId, toId, buffer);
+                break;
+
+            case AUDMessage.NAME:
+                msg = AUDMessage.create(version, component, fromId, toId, buffer);
                 break;
 
             default:

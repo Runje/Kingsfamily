@@ -57,14 +57,11 @@ public class FamilyMemberMessage extends FamilyMessage {
     }
 
     @Override
-    protected byte[] contentToByte() {
-        ByteBuffer byteBuffer = ByteBuffer.allocate(getContentLength());
-        byteBuffer.putShort((short) members.size());
+    protected void writeContent(ByteBuffer buffer) {
+        buffer.putShort((short) members.size());
         for (User user : members) {
-            user.writeBytes(byteBuffer);
+            user.writeBytes(buffer);
         }
-
-        return byteBuffer.array();
     }
 
     @Override
