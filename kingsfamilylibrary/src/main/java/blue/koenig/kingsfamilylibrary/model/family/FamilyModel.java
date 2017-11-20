@@ -108,8 +108,8 @@ public abstract class FamilyModel implements ConnectionEventListener, LoginListe
 
     @Override
     public void onReceiveMessage(FamilyMessage message) {
-        logger.info("Received message: " + message.getName());
-        logger.info("Component: " + message.getComponent());
+        logger.debug("Received message: " + message.toString());
+        logger.debug("Component: " + message.getComponent());
         String[] words = new String[0];
         boolean isTextMessage = false;
         if (message.getName().equals(TextMessage.NAME)) {

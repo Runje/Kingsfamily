@@ -9,6 +9,7 @@ import com.koenig.communication.messages.TextMessage;
 import com.koenig.communication.messages.family.CreateUserMessage;
 import com.koenig.communication.messages.family.FamilyMemberMessage;
 import com.koenig.communication.messages.family.UserMessage;
+import com.koenig.communication.messages.finance.CategorysMessage;
 import com.koenig.communication.messages.finance.ExpensesMessage;
 
 import org.slf4j.Logger;
@@ -50,6 +51,9 @@ public class Parser {
                 break;
             case ExpensesMessage.NAME:
                 msg = new ExpensesMessage(version, component, fromId, toId, buffer);
+                break;
+            case CategorysMessage.NAME:
+                msg = new CategorysMessage(version, component, fromId, toId, buffer);
                 break;
 
             case AUDMessage.NAME:

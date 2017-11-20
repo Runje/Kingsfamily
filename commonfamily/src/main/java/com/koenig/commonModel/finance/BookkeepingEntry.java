@@ -1,6 +1,7 @@
 package com.koenig.commonModel.finance;
 
 import com.koenig.commonModel.Item;
+import com.koenig.commonModel.Validator;
 
 import java.nio.ByteBuffer;
 
@@ -101,6 +102,12 @@ public class BookkeepingEntry extends Item {
         buffer.put(stringToByte(subCategory));
         buffer.putInt(costs);
         costDistribution.writeBytes(buffer);
+    }
+
+    public boolean isValid() {
+        // subcategory is allowed to be empty
+        return Validator.isNotEmpty(name) && Validator.isNotEmpty(category) &&
+                costDistribution.isValid() && costDistribution.sumReal() == costs;
     }
 
     @Override

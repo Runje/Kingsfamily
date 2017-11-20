@@ -1,6 +1,7 @@
 package com.koenig.commonModel.finance;
 
 import com.koenig.commonModel.Byteable;
+import com.koenig.commonModel.User;
 
 import java.nio.ByteBuffer;
 import java.util.HashMap;
@@ -11,9 +12,9 @@ import java.util.Map;
  */
 
 public class CostDistribution extends Byteable {
-    Map<String, Costs> distribution;
+    Map<User, Costs> distribution;
 
-    public CostDistribution(Map<String, Costs> distribution) {
+    public CostDistribution(Map<User, Costs> distribution) {
         this.distribution = distribution;
     }
 
@@ -25,13 +26,13 @@ public class CostDistribution extends Byteable {
         this();
         int size = buffer.getInt();
         for (int i = 0; i < size; i++) {
-            String id = byteToString(buffer);
+            User user = new User(buffer);
             Costs costs = new Costs(buffer);
-            distribution.put(id, costs);
+            distribution.put(user, costs);
         }
     }
 
-    public Map<String, Costs> getDistribution() {
+    public Map<User, Costs> getDistribution() {
         return distribution;
     }
 
@@ -57,17 +58,18 @@ public class CostDistribution extends Byteable {
         return sumReal() == sumTheory();
     }
 
-    public Costs getCostsFor(String userId) {
-        Costs costs = distribution.get(userId);
+    public Costs getCostsFor(User user) {
+        Costs costs = distribution.get(user);
         return costs == null ? new Costs(0, 0) : costs;
     }
 
-    public void putCosts(String userId, Costs costs) {
-        distribution.put(userId, costs);
+
+    public void putCosts(User user, Costs costs) {
+        distribution.put(user, costs);
     }
 
-    public void putCosts(String userId, int real, int theory) {
-        putCosts(userId, new Costs(real, theory));
+    public void putCosts(User user, int real, int theory) {
+        putCosts(user, new Costs(real, theory));
     }
 
     @Override
@@ -76,12 +78,12 @@ public class CostDistribution extends Byteable {
             return "Empty CostDistribution";
         }
         StringBuilder builder = new StringBuilder();
-        for (String userId : distribution.keySet()) {
-            Costs costs = distribution.get(userId);
-            builder.append(userId);
+        for (User user : distribution.keySet()) {
+            Costs costs = distribution.get(user);
+            builder.append(user.getName());
             builder.append(": ");
             builder.append(costs);
-            builder.append(System.lineSeparator());
+            builder.append("\n");
         }
 
         return builder.substring(0, builder.length() - 1);
@@ -90,19 +92,37 @@ public class CostDistribution extends Byteable {
     @Override
     public int getByteLength() {
         int size = 4;
-        for (String id : distribution.keySet()) {
-            size += stringLengthSize + id.length() + distribution.get(id).getByteLength();
+        for (User user : distribution.keySet()) {
+            size += user.getByteLength() + distribution.get(user).getByteLength();
         }
 
         return size;
     }
 
+    public float getRealPercent(User user) {
+        int sum = sumReal();
+        if (sum == 0) {
+            return 0;
+        }
+
+        return getCostsFor(user).Real / (float) sum;
+    }
+
+    public float getTheoryPercent(User user) {
+        int sum = sumTheory();
+        if (sum == 0) {
+            return 0;
+        }
+
+        return getCostsFor(user).Theory / (float) sum;
+    }
+
     @Override
     public void writeBytes(ByteBuffer buffer) {
         buffer.putInt(distribution.size());
-        for (String id : distribution.keySet()) {
-            buffer.put(stringToByte(id));
-            buffer.put(distribution.get(id).getBytes());
+        for (User user : distribution.keySet()) {
+            user.writeBytes(buffer);
+            buffer.put(distribution.get(user).getBytes());
         }
     }
 }

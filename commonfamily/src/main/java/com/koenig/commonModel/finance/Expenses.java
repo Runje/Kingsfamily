@@ -1,5 +1,7 @@
 package com.koenig.commonModel.finance;
 
+import com.koenig.commonModel.Validator;
+
 import org.joda.time.DateTime;
 
 import java.nio.ByteBuffer;
@@ -66,5 +68,9 @@ public class Expenses extends BookkeepingEntry {
                 "date=" + date +
                 ", standingOrder='" + standingOrder + '\'' +
                 '}';
+    }
+
+    public boolean isValid() {
+        return super.isValid() && Validator.dateIsReasonable(date) && Validator.isEmptyOrId(standingOrder);
     }
 }

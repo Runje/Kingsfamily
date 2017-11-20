@@ -8,6 +8,8 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 
+import com.koenig.StringFormats;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,6 +65,7 @@ public abstract class FamilyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         logger.info("Create Application");
+        StringFormats.init();
         initDagger();
         familyAppComponent.inject(this);
 

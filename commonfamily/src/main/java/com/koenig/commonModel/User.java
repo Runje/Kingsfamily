@@ -129,5 +129,18 @@ public class User extends Item {
         buffer.put(permissionsToBytes(permissions));
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        User user = (User) o;
+
+        return getId().equals(user.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getId().hashCode();
+    }
 }

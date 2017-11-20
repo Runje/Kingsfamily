@@ -52,6 +52,7 @@ public class ServerConnection extends SocketChannelTCPClient implements OnConnec
     }
 
     public void addOnConnectionEventListener(ConnectionEventListener connectionEventListener) {
+        logger.info("AddonConnectionEventListener: " + connectionEventListener.toString());
         this.connectionEventListeners.add(connectionEventListener);
     }
 

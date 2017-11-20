@@ -35,4 +35,6 @@
     <string name="confirm_delete">Möchten Sie den Eintrag %s wirklich löschen?</string>
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
+    <string name="edit">Ändern</string>
+    <string name="invalid">Ungültig</string>
 </resources>
