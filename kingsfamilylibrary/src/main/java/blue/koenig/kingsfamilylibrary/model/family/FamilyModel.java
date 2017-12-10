@@ -54,6 +54,9 @@ public abstract class FamilyModel implements ConnectionEventListener, LoginListe
         return loginHandler.getMembers();
     }
 
+    public void sendMessageToServer(FamilyMessage message) {
+        connection.sendFamilyMessage(message);
+    }
     public void onCreatingUser(String name, DateTime birthday) {
         connection.sendFamilyMessage(new CreateUserMessage(name, birthday));
     }

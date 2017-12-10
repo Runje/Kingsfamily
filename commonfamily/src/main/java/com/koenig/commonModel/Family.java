@@ -1,5 +1,6 @@
 package com.koenig.commonModel;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,26 +9,39 @@ import java.util.List;
  */
 
 public class Family extends Item {
-    private String name;
     private List<User> users;
 
-    public Family() {
+    public Family(String name) {
+        super(name);
         users = new ArrayList<>();
     }
 
-    public Family(String name) {
-        this();
-        this.name = name;
-    }
-
     public Family(String name, List<User> users) {
-        this.name = name;
+        super(name);
         this.users = users;
     }
 
-    public String getName() {
-        return name;
+    public Family(ByteBuffer buffer) {
+        super(buffer);
+        short size = buffer.getShort();
+        users = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            users.add(new User(buffer));
+        }
     }
+
+    @Override
+    public int getByteLength() {
+        return super.getByteLength() + getListLength(users);
+    }
+
+
+    @Override
+    public void writeBytes(ByteBuffer buffer) {
+        super.writeBytes(buffer);
+        writeList(users, buffer);
+    }
+
 
     public List<User> getUsers() {
         return users;

@@ -39,6 +39,7 @@ public abstract class EditDialog<T> {
         builder.setPositiveButton(R.string.edit, null);
 
         builder.setNegativeButton(R.string.cancel, null);
+        adaptBuilder(builder);
         dialog = builder.create();
         dialog.show();
         confirmButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
@@ -54,6 +55,10 @@ public abstract class EditDialog<T> {
         });
 
 
+    }
+
+    protected void adaptBuilder(AlertDialog.Builder builder) {
+        // to be overriden by subclasses
     }
 
     protected void setEnabledConfirmButton(boolean enabled) {

@@ -14,22 +14,21 @@ public class BookkeepingEntry extends Item {
     // userId --> costs
     public CostDistribution costDistribution;
     private int costs;
-    private String name;
     private String category;
     private String subCategory;
 
 
     public BookkeepingEntry(String name, String category, String subCategory, int costs, CostDistribution costDistribution) {
+        super(name);
         this.costs = costs;
-        this.name = name;
         this.category = category;
         this.subCategory = subCategory;
         this.costDistribution = costDistribution;
     }
 
     public BookkeepingEntry(BookkeepingEntry entry) {
+        super(entry.getName());
         this.costs = entry.costs;
-        this.name = entry.name;
         this.category = entry.category;
         this.subCategory = entry.subCategory;
         this.costDistribution = entry.costDistribution;
@@ -37,7 +36,6 @@ public class BookkeepingEntry extends Item {
 
     public BookkeepingEntry(ByteBuffer buffer) {
         super(buffer);
-        name = byteToString(buffer);
         category = byteToString(buffer);
         subCategory = byteToString(buffer);
         costs = buffer.getInt();
@@ -51,14 +49,6 @@ public class BookkeepingEntry extends Item {
 
     public void setCosts(int costs) {
         this.costs = costs;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getCategory() {
@@ -91,13 +81,12 @@ public class BookkeepingEntry extends Item {
 
     @Override
     public int getByteLength() {
-        return super.getByteLength() + getStringLength(name) + getStringLength(category) + getStringLength(subCategory) + 4 + costDistribution.getByteLength();
+        return super.getByteLength() + getStringLength(category) + getStringLength(subCategory) + 4 + costDistribution.getByteLength();
     }
 
     @Override
     public void writeBytes(ByteBuffer buffer) {
         super.writeBytes(buffer);
-        buffer.put(stringToByte(name));
         buffer.put(stringToByte(category));
         buffer.put(stringToByte(subCategory));
         buffer.putInt(costs);

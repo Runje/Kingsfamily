@@ -76,7 +76,14 @@ public class ServerConnection extends SocketChannelTCPClient implements OnConnec
     public void onReceiveBytes(byte[] bytes) {
 
         logger.info("Receive bytes: " + bytes.length);
-        FamilyMessage msg = Parser.parse(ByteBuffer.wrap(bytes));
+        FamilyMessage msg = null;
+        try {
+            msg = Parser.parse(ByteBuffer.wrap(bytes));
+
+        } catch (Exception e) {
+            logger.error("Error while parsing message: " + e.getMessage());
+            return;
+        }
 
         logger.info(msg.toString());
         for (ConnectionEventListener connectionEventListener : connectionEventListeners) {

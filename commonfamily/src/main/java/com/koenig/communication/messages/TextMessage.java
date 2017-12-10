@@ -13,6 +13,7 @@ import java.nio.ByteBuffer;
 public class TextMessage extends FamilyMessage {
 
     public static final String NAME = "TextMessage";
+    public static final String UPDATE_FAIL = "update_fail";
 
 
     String text;

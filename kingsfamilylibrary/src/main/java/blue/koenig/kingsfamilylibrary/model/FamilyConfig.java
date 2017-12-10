@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import blue.koenig.kingsfamilylibrary.R;
 
+import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.MODE_WORLD_WRITEABLE;
 
 /**
@@ -20,6 +21,7 @@ import static android.content.Context.MODE_WORLD_WRITEABLE;
 
 public class FamilyConfig {
     public static final String SHARED_PREF = "KINGSFAMILY_SHARED_PREF";
+    public static final String SPECIFIC_PREF = "KINGSFAMILY_SPECIFIC_PREF";
     public static final String USERID = "USERID";
     public static final String NO_ID = "NO_ID";
     public static final DateTimeFormatter DATE_FORMAT = DateTimeFormat.forPattern("dd.MM.YY");
@@ -80,5 +82,26 @@ public class FamilyConfig {
 
     }
 
+    /**
+     * Gets the last sync date from shared prefs.
+     *
+     * @param context
+     * @return
+     */
+    public static DateTime getLastSyncDate(Context context, String name) {
+        SharedPreferences preferences = context.getSharedPreferences(SPECIFIC_PREF, MODE_PRIVATE);
+        return new DateTime(preferences.getLong(LAST_SYNC_DATE + name, NO_DATE_LONG));
+    }
+
+    /**
+     * Saves the last sync date to shared prefs.
+     *
+     * @param date
+     * @param context
+     */
+    public static void saveLastSyncDate(DateTime date, Context context, String name) {
+        SharedPreferences preferences = context.getSharedPreferences(SPECIFIC_PREF, MODE_PRIVATE);
+        preferences.edit().putLong(LAST_SYNC_DATE + name, date.getMillis()).commit();
+    }
 
 }

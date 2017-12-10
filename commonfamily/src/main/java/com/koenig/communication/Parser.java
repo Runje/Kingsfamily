@@ -4,13 +4,13 @@ package com.koenig.communication;
 import com.koenig.commonModel.Byteable;
 import com.koenig.commonModel.Component;
 import com.koenig.communication.messages.AUDMessage;
+import com.koenig.communication.messages.AskForUpdatesMessage;
 import com.koenig.communication.messages.FamilyMessage;
 import com.koenig.communication.messages.TextMessage;
+import com.koenig.communication.messages.UpdatesMessage;
 import com.koenig.communication.messages.family.CreateUserMessage;
 import com.koenig.communication.messages.family.FamilyMemberMessage;
 import com.koenig.communication.messages.family.UserMessage;
-import com.koenig.communication.messages.finance.CategorysMessage;
-import com.koenig.communication.messages.finance.ExpensesMessage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,15 +49,14 @@ public class Parser {
             case UserMessage.NAME:
                 msg = new UserMessage(version, component, fromId, toId, buffer);
                 break;
-            case ExpensesMessage.NAME:
-                msg = new ExpensesMessage(version, component, fromId, toId, buffer);
+            case UpdatesMessage.NAME:
+                msg = new UpdatesMessage(version, component, fromId, toId, buffer);
                 break;
-            case CategorysMessage.NAME:
-                msg = new CategorysMessage(version, component, fromId, toId, buffer);
+            case AskForUpdatesMessage.NAME:
+                msg = new AskForUpdatesMessage(version, component, fromId, toId, buffer);
                 break;
-
             case AUDMessage.NAME:
-                msg = AUDMessage.create(version, component, fromId, toId, buffer);
+                msg = new AUDMessage(version, component, fromId, toId, buffer);
                 break;
 
             default:

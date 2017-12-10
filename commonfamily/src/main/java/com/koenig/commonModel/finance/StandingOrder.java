@@ -4,6 +4,7 @@ import com.koenig.commonModel.Frequency;
 
 import org.joda.time.DateTime;
 
+import java.nio.ByteBuffer;
 import java.util.List;
 
 /**
@@ -33,6 +34,11 @@ public class StandingOrder extends BookkeepingEntry {
         this.frequencyFactor = frequencyFactor;
         this.executedExpenses = executedExpenses;
         this.endDate = endDate;
+    }
+
+    public StandingOrder(ByteBuffer buffer) {
+        super(buffer);
+        // TODO
     }
 
     public DateTime getFirstDate() {

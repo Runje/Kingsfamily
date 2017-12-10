@@ -9,18 +9,30 @@ import java.util.UUID;
  */
 
 public abstract class Item extends Byteable {
-    private String id;
+    protected String id;
+    protected String name;
 
-    public Item() {
+    public Item(String name) {
+        this.name = name;
         id = UUID.randomUUID().toString();
     }
 
-    public Item(String id) {
+    public Item(String id, String name) {
         this.id = id;
+        this.name = name;
     }
 
     public Item(ByteBuffer buffer) {
         id = byteToString(buffer);
+        name = byteToString(buffer);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getId() {
@@ -33,12 +45,13 @@ public abstract class Item extends Byteable {
 
     @Override
     public int getByteLength() {
-        return getStringLength(id);
+        return getStringLength(id) + getStringLength(name);
     }
 
     @Override
     public void writeBytes(ByteBuffer buffer) {
         buffer.put(stringToByte(id));
+        writeString(name, buffer);
     }
 
 }

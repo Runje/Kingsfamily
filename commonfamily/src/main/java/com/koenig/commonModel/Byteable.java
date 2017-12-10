@@ -1,11 +1,15 @@
 package com.koenig.commonModel;
 
 
+import com.koenig.commonModel.finance.Expenses;
+import com.koenig.commonModel.finance.StandingOrder;
+
 import org.joda.time.DateTime;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.util.List;
 
 /**
  * Created by Thomas on 28.10.2017.
@@ -44,8 +48,34 @@ public abstract class Byteable {
         return new String(bytes, Charset.forName(encoding)).trim();
     }
 
+    public static Item byteToItem(ByteBuffer buffer) {
+        ItemType className = Byteable.byteToEnum(buffer, ItemType.class);
+        switch (className) {
+            case EXPENSES:
+                return new Expenses(buffer);
+            case FAMILY:
+                return new Family(buffer);
+            case OPERATION:
+                return new Operation(buffer);
+            case STANDING_ORDER:
+                return new StandingOrder(buffer);
+            case USER:
+                return new User(buffer);
+        }
+
+        throw new RuntimeException("Unsupported item: " + className.toString());
+    }
+
+    public static void writeBool(boolean b, ByteBuffer buffer) {
+        buffer.put(booleanToByte(b));
+    }
+
     public static byte booleanToByte(boolean b) {
         return (byte) (b ? 1 : 0);
+    }
+
+    public static boolean byteToBoolean(ByteBuffer buffer) {
+        return byteToBoolean(buffer.get());
     }
 
     public static boolean byteToBoolean(Byte b) {
@@ -54,6 +84,10 @@ public abstract class Byteable {
 
     public static DateTime byteToDateTime(ByteBuffer buffer) {
         return new DateTime(buffer.getLong());
+    }
+
+    public static void writeDateTime(DateTime dateTime, ByteBuffer buffer) {
+        buffer.put(dateTimeToBytes(dateTime));
     }
 
     public static int getDateLength() {
@@ -66,6 +100,31 @@ public abstract class Byteable {
         return buffer.array();
     }
 
+    public static int getEnumLength(Enum operator) {
+        return getStringLength(operator.name());
+    }
+
+    public static void writeEnum(Enum e, ByteBuffer buffer) {
+        writeString(e.name(), buffer);
+    }
+
+    public static <T extends Enum<T>> T byteToEnum(ByteBuffer buffer, Class<T> enumClass) {
+        return Enum.valueOf(enumClass, byteToString(buffer));
+    }
+
+    public static int getItemLength(Item item) {
+        return Byteable.getEnumLength(ItemType.fromItem(item)) + item.getByteLength();
+    }
+
+    public static <T extends Item> void writeItem(T item, ByteBuffer buffer) {
+        writeEnum(ItemType.fromItem(item), buffer);
+        item.writeBytes(buffer);
+    }
+
+    public int getBoolLength() {
+        return 1;
+    }
+
     public abstract int getByteLength();
 
     public final byte[] getBytes() {
@@ -76,4 +135,19 @@ public abstract class Byteable {
 
     public abstract void writeBytes(ByteBuffer buffer);
 
+    protected void writeList(List<? extends Byteable> byteables, ByteBuffer buffer) {
+        buffer.putShort((short) byteables.size());
+        for (Byteable byteable : byteables) {
+            byteable.writeBytes(buffer);
+        }
+    }
+
+    protected int getListLength(List<? extends Byteable> byteables) {
+        int size = 2;
+        for (Byteable byteable : byteables) {
+            size += byteable.getByteLength();
+        }
+
+        return size;
+    }
 }

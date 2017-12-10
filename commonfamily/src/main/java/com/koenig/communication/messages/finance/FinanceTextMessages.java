@@ -9,31 +9,30 @@ import com.koenig.communication.messages.TextMessage;
  */
 
 public class FinanceTextMessages {
-    public static final String GET_ALL_EXPENSES = "get_all_expenses";
     public static final String GET_ALL_EXPENSES_FAIL = "get_all_expenses_fail";
-    public static final String GET_ALL_CATEGORYS = "get_all_categorys";
     public static final String GET_ALL_CATEGORYS_FAIL = "get_all_categorys_fail";
-    public static final String AUD_FAIL = "aud_expenses_fail";
+    public static final String AUD_FAIL = "aud_fail";
+    public static final String AUD_SUCCESS = "aud_success";
 
-    public static TextMessage getAllExpensesMessage() {
-        return new TextMessage(Component.FINANCE, GET_ALL_EXPENSES);
-    }
+
 
     public static TextMessage getAllExpensesMessageFail() {
         return new TextMessage(Component.FINANCE, GET_ALL_EXPENSES_FAIL);
-    }
-
-    public static TextMessage getAllCategorysMessage() {
-        return new TextMessage(Component.FINANCE, GET_ALL_CATEGORYS);
     }
 
     public static TextMessage getAllCategorysMessageFail() {
         return new TextMessage(Component.FINANCE, GET_ALL_CATEGORYS_FAIL);
     }
 
+    public static TextMessage getUpdateFailMessage() {
+        return new TextMessage(Component.FINANCE, TextMessage.UPDATE_FAIL);
+    }
 
+    public static TextMessage audFailMessage(String id) {
+        return new TextMessage(Component.FINANCE, AUD_FAIL + FamilyMessage.SEPARATOR + id);
+    }
 
-    public static TextMessage audFailMessage(String operation) {
-        return new TextMessage(Component.FINANCE, AUD_FAIL + FamilyMessage.SEPARATOR + operation);
+    public static TextMessage audSuccessMessage(String id) {
+        return new TextMessage(Component.FINANCE, AUD_SUCCESS + FamilyMessage.SEPARATOR + id);
     }
 }
