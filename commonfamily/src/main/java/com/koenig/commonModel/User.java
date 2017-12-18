@@ -8,15 +8,24 @@ import java.util.Map;
 
 public class User extends Item {
     private String family;
+    private String abbreviation;
     private DateTime birthday;
     private Map<Component, Permission> permissions;
-
     public User(String name) {
         super(name);
     }
 
-    public User(String id, String name, String family, DateTime birthday, Map<Component, Permission> permissions) {
+    public User(String id, String name, String abbreviation, String family, DateTime birthday, Map<Component, Permission> permissions) {
         super(id, name);
+        this.abbreviation = abbreviation;
+        this.family = family;
+        this.birthday = birthday;
+        this.permissions = permissions;
+    }
+
+    public User(String name, String abbreviation, String family, DateTime birthday, Map<Component, Permission> permissions) {
+        super(name);
+        this.abbreviation = abbreviation;
         this.family = family;
         this.birthday = birthday;
         this.permissions = permissions;
@@ -24,6 +33,7 @@ public class User extends Item {
 
     public User(String name, String family, DateTime birthday, Map<Component, Permission> permissions) {
         super(name);
+        this.abbreviation = String.valueOf(name.charAt(0));
         this.family = family;
         this.birthday = birthday;
         this.permissions = permissions;
@@ -31,6 +41,7 @@ public class User extends Item {
 
     public User(String name, String family, DateTime birthday) {
         super(name);
+        this.abbreviation = String.valueOf(name.charAt(0));
         this.family = family;
         this.birthday = birthday;
         permissions = Permission.CreateNonePermissions();
@@ -38,6 +49,7 @@ public class User extends Item {
 
     public User(String id, String name, String family, DateTime birthday) {
         super(id, name);
+        this.abbreviation = String.valueOf(name.charAt(0));
         this.family = family;
         this.birthday = birthday;
         permissions = Permission.CreateNonePermissions();
@@ -45,6 +57,7 @@ public class User extends Item {
 
     public User(ByteBuffer buffer) {
         super(buffer);
+        abbreviation = byteToString(buffer);
         family = byteToString(buffer);
         birthday = byteToDateTime(buffer);
         permissions = bytesToPermissions(buffer);
@@ -86,6 +99,14 @@ public class User extends Item {
         return size;
     }
 
+    public String getAbbreviation() {
+        return abbreviation;
+    }
+
+    public void setAbbreviation(String abbreviation) {
+        this.abbreviation = abbreviation;
+    }
+
     public String getFamily() {
         return family;
     }
@@ -108,11 +129,12 @@ public class User extends Item {
 
     @Override
     public int getByteLength() {
-        return super.getByteLength() + getStringLength(family) + getDateLength() + getPermissionLength(permissions);
+        return super.getByteLength() + getStringLength(abbreviation) + getStringLength(family) + getDateLength() + getPermissionLength(permissions);
     }
 
     public void writeBytes(ByteBuffer buffer) {
         super.writeBytes(buffer);
+        buffer.put(stringToByte(abbreviation));
         buffer.put(stringToByte(family));
         buffer.put(dateTimeToBytes(birthday));
         buffer.put(permissionsToBytes(permissions));

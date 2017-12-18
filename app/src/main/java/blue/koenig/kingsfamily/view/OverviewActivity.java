@@ -1,9 +1,7 @@
 package blue.koenig.kingsfamily.view;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
@@ -40,20 +38,6 @@ public class OverviewActivity extends FamilyActivity implements OverviewView {
         ab.setDisplayShowTitleEnabled(false); // disable the default title element here (for centered title)
         connectionStatus = findViewById(R.id.connectionStatus);
         buFinance = findViewById(R.id.buFinance);
-
-
-    }
-
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("TITEL");
-        builder.setMessage("MESSAGE");
-        builder.setPositiveButton(blue.koenig.kingsfamilylibrary.R.string.edit, null);
-        builder.setNegativeButton(blue.koenig.kingsfamilylibrary.R.string.cancel, null);
-        builder.create().show();
-        logger.info("Show dialog");
     }
 
     @Override

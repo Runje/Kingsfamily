@@ -47,7 +47,6 @@ public abstract class FamilyModel implements ConnectionEventListener, LoginListe
         this.view = createNullView();
         connection.addOnConnectionEventListener(this);
         loginHandler.setLoginListener(this);
-
     }
 
     public List<User> getFamilyMembers() {

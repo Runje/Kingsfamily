@@ -53,6 +53,8 @@ public abstract class Byteable {
         switch (className) {
             case EXPENSES:
                 return new Expenses(buffer);
+            case CATEGORY:
+                return new Category(buffer);
             case FAMILY:
                 return new Family(buffer);
             case OPERATION:
@@ -121,6 +123,22 @@ public abstract class Byteable {
         item.writeBytes(buffer);
     }
 
+    public static void writeList(List<? extends Byteable> byteables, ByteBuffer buffer) {
+        buffer.putShort((short) byteables.size());
+        for (Byteable byteable : byteables) {
+            byteable.writeBytes(buffer);
+        }
+    }
+
+    public static int getListLength(List<? extends Byteable> byteables) {
+        int size = 2;
+        for (Byteable byteable : byteables) {
+            size += byteable.getByteLength();
+        }
+
+        return size;
+    }
+
     public int getBoolLength() {
         return 1;
     }
@@ -134,20 +152,4 @@ public abstract class Byteable {
     }
 
     public abstract void writeBytes(ByteBuffer buffer);
-
-    protected void writeList(List<? extends Byteable> byteables, ByteBuffer buffer) {
-        buffer.putShort((short) byteables.size());
-        for (Byteable byteable : byteables) {
-            byteable.writeBytes(buffer);
-        }
-    }
-
-    protected int getListLength(List<? extends Byteable> byteables) {
-        int size = 2;
-        for (Byteable byteable : byteables) {
-            size += byteable.getByteLength();
-        }
-
-        return size;
-    }
 }

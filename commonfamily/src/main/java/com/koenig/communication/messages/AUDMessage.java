@@ -1,10 +1,12 @@
 package com.koenig.communication.messages;
 
+import com.koenig.commonModel.Category;
 import com.koenig.commonModel.Component;
 import com.koenig.commonModel.Item;
 import com.koenig.commonModel.Operation;
 import com.koenig.commonModel.Operator;
 import com.koenig.commonModel.finance.Expenses;
+import com.koenig.commonModel.finance.StandingOrder;
 
 import java.nio.ByteBuffer;
 
@@ -40,7 +42,7 @@ public class AUDMessage extends FamilyMessage {
 
     private static AUDMessage create(Operator operation, Item item) {
         Component component;
-        if (item instanceof Expenses || item instanceof Operation) {
+        if (item instanceof Expenses || item instanceof Operation || item instanceof StandingOrder || item instanceof Category) {
             component = Component.FINANCE;
             return new AUDMessage(component, new Operation(operation, item));
         } else {

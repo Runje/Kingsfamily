@@ -2,7 +2,11 @@ package blue.koenig.kingsfamilylibrary.model;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
+
+import com.koenig.commonModel.Byteable;
+import com.koenig.commonModel.User;
+
+import net.iharder.Base64;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -10,10 +14,14 @@ import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import blue.koenig.kingsfamilylibrary.R;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
+
+import blue.koenig.kingsfamilylibrary.model.shared.FamilyContentProvider;
 
 import static android.content.Context.MODE_PRIVATE;
-import static android.content.Context.MODE_WORLD_WRITEABLE;
 
 /**
  * Created by Thomas on 18.09.2017.
@@ -23,37 +31,29 @@ public class FamilyConfig {
     public static final String SHARED_PREF = "KINGSFAMILY_SHARED_PREF";
     public static final String SPECIFIC_PREF = "KINGSFAMILY_SPECIFIC_PREF";
     public static final String USERID = "USERID";
-    public static final String NO_ID = "NO_ID";
+    public static final String NO_ID = "";
     public static final DateTimeFormatter DATE_FORMAT = DateTimeFormat.forPattern("dd.MM.YY");
     public static final String NEVER = "-";
     private static final String LAST_SYNC_DATE = "LASTSYNCDATE";
     private static final long NO_DATE_LONG = 0;
     public static final DateTime NO_DATE = new DateTime(NO_DATE_LONG);
+    private static final String FAMILY_MEMBERS = "FAMILY_MEMBERS";
+    private static final String FAMILY_NAME = "FAMILY_NAME";
+    private static final String USER_NAME = "USER_NAME";
     private static Logger logger = LoggerFactory.getLogger("FamilyConfig");
-    private static String userId = "";
+    private static String userId = NO_ID;
 
 
-    public static SharedPreferences getSharedPreferencesBetweenApps(Context context) {
-        try {
-            // TODO: what does ignore security really mean?
-            Context familyContext = context.createPackageContext(context.getString(R.string.family_uri), Context.CONTEXT_IGNORE_SECURITY);
-            return familyContext.getSharedPreferences(SHARED_PREF, MODE_WORLD_WRITEABLE);
-        } catch (PackageManager.NameNotFoundException e) {
-            logger.error("FAMILY app is not installed");
 
-            // TODO: either the app must be installed or store userId in own shared preferences!?
-            return null;
-        }
-    }
     /**
      * Gets the userId of the User.
      * @return Name of the User
      */
     public static String getUserId(Context context) {
-        if (userId.equals(""))
+        if (userId.equals(NO_ID))
         {
-            SharedPreferences preferences = getSharedPreferencesBetweenApps(context);
-            userId = preferences.getString(USERID, NO_ID);
+            String id = FamilyContentProvider.get(context, USERID);
+            userId = id;
         }
 
         return userId;
@@ -66,20 +66,8 @@ public class FamilyConfig {
      */
     public static void saveUserId(String userId, Context context) {
         logger.info("Setting user id to " + userId);
-        SharedPreferences preferences = getSharedPreferencesBetweenApps(context);
-        preferences.edit().putString(USERID, userId).apply();
+        FamilyContentProvider.put(context, USERID, userId);
         FamilyConfig.userId = userId;
-    }
-
-    public static String getAbbreviationFor(String userName, Context context) {
-        SharedPreferences preferences = getSharedPreferencesBetweenApps(context);
-        return preferences.getString(userName, userName.substring(0, 1));
-    }
-
-    public static void setAbbreviationFor(String userName, String abbreviation, Context context) {
-        SharedPreferences preferences = getSharedPreferencesBetweenApps(context);
-        preferences.edit().putString(userName, abbreviation).apply();
-
     }
 
     /**
@@ -104,4 +92,31 @@ public class FamilyConfig {
         preferences.edit().putLong(LAST_SYNC_DATE + name, date.getMillis()).commit();
     }
 
+    public static List<User> getFamilyMembers(Context context) {
+        String membersString = FamilyContentProvider.get(context, FAMILY_MEMBERS);
+        if (membersString.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        ByteBuffer buffer = null;
+        try {
+            buffer = ByteBuffer.wrap(Base64.decode(membersString));
+            short size = buffer.getShort();
+            List<User> members = new ArrayList<>(size);
+            for (int i = 0; i < size; i++) {
+                members.add(new User(buffer));
+            }
+            return members;
+        } catch (IOException e) {
+            logger.error("Error decoding family members");
+            return new ArrayList<>();
+        }
+    }
+
+    public static void setFamilyMembers(Context context, List<User> members) {
+        ByteBuffer buffer = ByteBuffer.allocate(Byteable.getListLength(members));
+        Byteable.writeList(members, buffer);
+        String membersString = Base64.encodeBytes(buffer.array());
+        FamilyContentProvider.put(context, FAMILY_MEMBERS, membersString);
+    }
 }

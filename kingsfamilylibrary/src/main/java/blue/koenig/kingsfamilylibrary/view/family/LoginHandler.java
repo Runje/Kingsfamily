@@ -36,7 +36,7 @@ public class LoginHandler implements ConnectionEventListener {
         this.connection = connection;
         this.context = context;
         connection.addOnConnectionEventListener(this);
-        //if (connection.isConnected()) login();
+        members = FamilyConfig.getFamilyMembers(context);
     }
 
     public List<User> getMembers() {
@@ -103,6 +103,7 @@ public class LoginHandler implements ConnectionEventListener {
                 if (listener != null) {
                     listener.onFamilyMembers(familyMemberMessage.getMembers());
                 }
+                FamilyConfig.setFamilyMembers(context, members);
                 login = true;
                 loggingIn = false;
                 if (listener != null) listener.onLogin();

@@ -47,7 +47,7 @@ public class PickAndEditItemDialog extends PickItemDialog {
             }
         });
         listView.setOnItemLongClickListener((parent, view, position, id) -> {
-            // TODO: add delete icon instead of long click
+            // TODO: put delete icon instead of long click
             String item = items.get(position);
             new DeleteDialog<String>(context, item, item, (i) -> pickAndEditListener.onDeleteItem(i));
             return true;

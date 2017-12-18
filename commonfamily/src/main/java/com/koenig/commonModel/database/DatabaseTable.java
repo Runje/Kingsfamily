@@ -30,6 +30,29 @@ public abstract class DatabaseTable<T extends Item> {
 
     protected ReentrantLock lock = new ReentrantLock();
 
+    public static String buildStringList(List<String> list) {
+        if (list.size() > 0) {
+            StringBuilder builder = new StringBuilder();
+            for (String s : list) {
+                builder.append(s + STRING_LIST_SEPARATOR);
+            }
+
+            return builder.substring(0, builder.length() - 1);
+        } else {
+            return "";
+        }
+    }
+
+    public static List<String> getStringList(String listAsString) {
+        if (listAsString.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        String[] items = listAsString.split(STRING_LIST_SEPARATOR);
+        // need to make a copy to allow List.add method! (Alternative create list  manually)
+        return new ArrayList<>(Arrays.asList(items));
+    }
+
     public abstract String getTableName();
 
     public abstract void create() throws SQLException;
@@ -76,7 +99,6 @@ public abstract class DatabaseTable<T extends Item> {
      */
     protected abstract String getTableSpecificCreateStatement();
 
-
     public List<T> toItemList(List<DatabaseItem<T>> list) {
         List<T> users = new ArrayList<>(list.size());
         for (DatabaseItem<T> user : list) {
@@ -84,25 +106,6 @@ public abstract class DatabaseTable<T extends Item> {
         }
 
         return users;
-    }
-
-    protected String buildStringList(List<String> list) {
-        if (list.size() > 0) {
-            StringBuilder builder = new StringBuilder();
-            for (String s : list) {
-                builder.append(s + STRING_LIST_SEPARATOR);
-            }
-
-            return builder.substring(0, builder.length() - 1);
-        } else {
-            return "";
-        }
-    }
-
-    protected List<String> getStringList(String listAsString) {
-        String[] items = listAsString.split(STRING_LIST_SEPARATOR);
-        // need to make a copy to allow List.add method! (Alternative create list  manually)
-        return new ArrayList<>(Arrays.asList(items));
     }
 
     protected void runInLock(Database.Transaction runnable) throws SQLException {

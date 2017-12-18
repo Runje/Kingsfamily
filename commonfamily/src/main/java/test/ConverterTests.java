@@ -1,11 +1,14 @@
 package test;
 
+import com.koenig.commonModel.Byteable;
 import com.koenig.commonModel.Family;
 import com.koenig.commonModel.Operation;
 import com.koenig.commonModel.Operator;
+import com.koenig.commonModel.Permission;
 import com.koenig.commonModel.database.DatabaseItem;
 
 import org.joda.time.DateTime;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.nio.ByteBuffer;
@@ -54,4 +57,16 @@ public class ConverterTests {
         assertEquals(result.getInsertId(), insertId);
         assertEquals(result.isDeleted(), deleted);
     }
+
+    @Test
+    public void permissions() {
+        Permission permission = Permission.NONE;
+        ByteBuffer buffer = ByteBuffer.allocate(Byteable.getStringLength(permission.name()));
+        permission.write(buffer);
+        buffer.flip();
+        Permission read = Permission.read(buffer);
+        Assert.assertEquals(permission, read);
+    }
+
+
 }
