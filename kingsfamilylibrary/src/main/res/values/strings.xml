@@ -8,6 +8,7 @@
 
     <string name="date">Datum</string>
     <string name="cancel">Abbrechen</string>
+    <string name="unlimited">Unbegrenzt</string>
     <string name="not_connected">Keine Verbindung</string>
     <string name="connected">Verbunden</string>
     <string name="finance_uri">com.example.thomas.lga</string>

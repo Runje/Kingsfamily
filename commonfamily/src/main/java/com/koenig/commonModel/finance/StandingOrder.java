@@ -5,6 +5,7 @@ import com.koenig.commonModel.Frequency;
 import org.joda.time.DateTime;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,7 +39,37 @@ public class StandingOrder extends BookkeepingEntry {
 
     public StandingOrder(ByteBuffer buffer) {
         super(buffer);
-        // TODO
+        firstDate = byteToDateTime(buffer);
+        endDate = byteToDateTime(buffer);
+        frequency = byteToEnum(buffer, Frequency.class);
+        frequencyFactor = buffer.getInt();
+        short size = buffer.getShort();
+        executedExpenses = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            executedExpenses.add(byteToString(buffer));
+        }
+    }
+
+    @Override
+    public int getByteLength() {
+        int size = 2;
+        for (String executedExpens : executedExpenses) {
+            size += getStringLength(executedExpens);
+        }
+        return super.getByteLength() + getDateLength() + getDateLength() + getEnumLength(frequency) + 4 + size;
+    }
+
+    @Override
+    public void writeBytes(ByteBuffer buffer) {
+        super.writeBytes(buffer);
+        writeDateTime(firstDate, buffer);
+        writeDateTime(endDate, buffer);
+        writeEnum(frequency, buffer);
+        buffer.putInt(frequencyFactor);
+        buffer.putShort((short) executedExpenses.size());
+        for (String string : executedExpenses) {
+            writeString(string, buffer);
+        }
     }
 
     public DateTime getFirstDate() {

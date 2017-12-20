@@ -22,6 +22,7 @@ import java.util.List;
 import blue.koenig.kingsfamilylibrary.model.shared.FamilyContentProvider;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.koenig.FamilyConstants.NO_DATE_LONG;
 
 /**
  * Created by Thomas on 18.09.2017.
@@ -35,8 +36,8 @@ public class FamilyConfig {
     public static final DateTimeFormatter DATE_FORMAT = DateTimeFormat.forPattern("dd.MM.YY");
     public static final String NEVER = "-";
     private static final String LAST_SYNC_DATE = "LASTSYNCDATE";
-    private static final long NO_DATE_LONG = 0;
-    public static final DateTime NO_DATE = new DateTime(NO_DATE_LONG);
+
+
     private static final String FAMILY_MEMBERS = "FAMILY_MEMBERS";
     private static final String FAMILY_NAME = "FAMILY_NAME";
     private static final String USER_NAME = "USER_NAME";

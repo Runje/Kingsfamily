@@ -3,6 +3,8 @@ package blue.koenig.kingsfamilylibrary.model;
 import android.content.Context;
 import android.content.pm.PackageManager;
 
+import com.koenig.FamilyConstants;
+
 import org.joda.time.DateTime;
 
 import blue.koenig.kingsfamilylibrary.model.communication.ServerConnection;
@@ -23,7 +25,7 @@ public class Utils {
 
     public static DateTime stringToDateTime(String date) {
         if (date.equals(FamilyConfig.NEVER)) {
-            return new FamilyConfig().NO_DATE;
+            return FamilyConstants.NO_DATE;
         }
 
         return DateTime.parse(date, FamilyConfig.DATE_FORMAT);
