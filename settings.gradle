@@ -1,1 +1,3 @@
 include ':app', ':commonfamily', ':kingsfamilylibrary'
+include 'tcpcommunication'
+project(':tcpcommunication').projectDir = new File('../Utilties/tcpcommunication')

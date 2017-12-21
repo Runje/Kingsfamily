@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/commonfamily" />
             <option value="$PROJECT_DIR$/kingsfamilylibrary" />
+            <option value="$PROJECT_DIR$/../Utilties/tcpcommunication" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
