@@ -7,6 +7,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.support.multidex.MultiDexApplication;
 
 import com.koenig.StringFormats;
 
@@ -30,7 +31,7 @@ import blue.koenig.kingsfamilylibrary.view.family.LoginHandler;
  * Created by Thomas on 01.11.2017.
  */
 
-public abstract class FamilyApplication extends Application {
+public abstract class FamilyApplication extends MultiDexApplication {
     protected FamilyAppComponent familyAppComponent;
     @Inject
     ServerConnection connection;

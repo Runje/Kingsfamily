@@ -33,12 +33,12 @@ dependencies {
     compile 'com.android.support:appcompat-v7:27.+'
     compile 'com.android.support:design:27.+'
 
-    compile 'joda-time:joda-time:2.8'
+    compile 'joda-time:joda-time:2.9.9'
     testCompile 'junit:junit:4.12'
     compile project(':commonfamily')
     // Dependency Injection
-    annotationProcessor "com.google.dagger:dagger-compiler:2.11"
-    compile "com.google.dagger:dagger:2.11"
+    annotationProcessor "com.google.dagger:dagger-compiler:2.13"
+    compile "com.google.dagger:dagger:2.13"
     provided 'javax.annotation:jsr250-api:1.0'
     //compile 'org.slf4j:slf4j-android:1.7.22'
     // Debug and verbose log are working
@@ -46,13 +46,14 @@ dependencies {
     compile 'org.slf4j:slf4j-android:1.7.22'
     //compile files('../../Utilties/tcpcommunication/build/libs/tcpcommunication.jar')
     compile project(':tcpcommunication')
-    compile 'com.android.support.constraint:constraint-layout:1.0.1'
+
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     compile 'org.jetbrains:annotations-java5:15.0'
 
 // https://mvnrepository.com/artifact/net.iharder/base64
     compile group: 'net.iharder', name: 'base64', version: '2.3.9'
-
+    compile 'com.android.support:multidex:1.0.2'
 }
 
 
