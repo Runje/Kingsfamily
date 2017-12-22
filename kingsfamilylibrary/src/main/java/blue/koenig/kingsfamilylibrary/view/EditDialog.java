@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import org.jetbrains.annotations.NotNull;
 
 import blue.koenig.kingsfamilylibrary.R;
 
@@ -25,7 +24,7 @@ public abstract class EditDialog<T> {
     private AlertDialog dialog;
     private Button confirmButton;
 
-    public EditDialog(Context context, T item, @NotNull EditListener<T> listener) {
+    public EditDialog(Context context, T item, /*@NotNull*/ EditListener<T> listener) {
         this.context = context;
         this.listener = listener;
         this.item = item;

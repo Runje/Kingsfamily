@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 
-import org.jetbrains.annotations.NotNull;
 
 import blue.koenig.kingsfamilylibrary.R;
 
@@ -19,7 +18,7 @@ public class DeleteDialog<T> {
     private String name;
     private T item;
 
-    public DeleteDialog(Context context, String name, T item, @NotNull DeleteListener<T> listener) {
+    public DeleteDialog(Context context, String name, T item, /*@NotNull*/ DeleteListener<T> listener) {
         this.context = context;
         this.listener = listener;
         this.name = name;

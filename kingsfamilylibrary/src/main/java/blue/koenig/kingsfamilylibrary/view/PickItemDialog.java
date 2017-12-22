@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -30,7 +29,7 @@ public class PickItemDialog {
     private ArrayAdapter<String> subAdapter;
     private String main;
 
-    public PickItemDialog(Context context, String title, List<String> items, @NotNull PickListener listener) {
+    public PickItemDialog(Context context, String title, List<String> items, /*@NotNull*/ PickListener listener) {
         this.context = context;
         this.listener = listener;
         this.title = title;

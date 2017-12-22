@@ -26,34 +26,34 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:27.+'
-    compile 'com.android.support:design:27.+'
+    implementation 'com.android.support:appcompat-v7:27.+'
+    implementation 'com.android.support:design:27.+'
 
-    compile 'joda-time:joda-time:2.9.9'
-    testCompile 'junit:junit:4.12'
-    compile project(':commonfamily')
+    implementation 'joda-time:joda-time:2.9.9'
+    testImplementation 'junit:junit:4.12'
+    implementation project(':commonfamily')
     // Dependency Injection
     annotationProcessor "com.google.dagger:dagger-compiler:2.13"
-    compile "com.google.dagger:dagger:2.13"
-    provided 'javax.annotation:jsr250-api:1.0'
+    implementation "com.google.dagger:dagger:2.13"
+    compileOnly 'javax.annotation:jsr250-api:1.0'
     //compile 'org.slf4j:slf4j-android:1.7.22'
     // Debug and verbose log are working
     //compile 'org.slf4j:slf4j-android:1.6.1-RC1'
-    compile 'org.slf4j:slf4j-android:1.7.22'
+    implementation 'org.slf4j:slf4j-android:1.7.22'
     //compile files('../../Utilties/tcpcommunication/build/libs/tcpcommunication.jar')
-    compile project(':tcpcommunication')
+    implementation project(':tcpcommunication')
 
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-    compile 'org.jetbrains:annotations-java5:15.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    //annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    //implementation 'org.jetbrains:annotations-java5:15.0'
 
 // https://mvnrepository.com/artifact/net.iharder/base64
-    compile group: 'net.iharder', name: 'base64', version: '2.3.9'
-    compile 'com.android.support:multidex:1.0.2'
+    implementation group: 'net.iharder', name: 'base64', version: '2.3.9'
+    implementation 'com.android.support:multidex:1.0.2'
 }
 
 

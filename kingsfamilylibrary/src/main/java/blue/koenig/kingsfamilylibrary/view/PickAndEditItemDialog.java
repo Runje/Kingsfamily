@@ -6,7 +6,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -20,7 +19,7 @@ public class PickAndEditItemDialog extends PickItemDialog {
 
     PickAndEditListener pickAndEditListener;
 
-    public PickAndEditItemDialog(Context context, String title, List<String> items, @NotNull PickAndEditListener listener) {
+    public PickAndEditItemDialog(Context context, String title, List<String> items, /*@NotNull*/ PickAndEditListener listener) {
         super(context, title, items, listener);
     }
 
