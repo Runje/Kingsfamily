@@ -1,11 +1,11 @@
 package blue.koenig.kingsfamilylibrary.view;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class PickAndEditItemDialog extends PickItemDialog {
 
     PickAndEditListener pickAndEditListener;
 
-    public PickAndEditItemDialog(Context context, String title, List<String> items, /*@NotNull*/ PickAndEditListener listener) {
+    public PickAndEditItemDialog(Context context, String title, List<String> items, @NonNull PickAndEditListener listener) {
         super(context, title, items, listener);
     }
 

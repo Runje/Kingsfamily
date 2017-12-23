@@ -13,6 +13,7 @@ public class BookkeepingEntry extends Item {
 
     // userId --> costs
     public CostDistribution costDistribution;
+    // costs in cent
     private int costs;
     private String category;
     private String subCategory;

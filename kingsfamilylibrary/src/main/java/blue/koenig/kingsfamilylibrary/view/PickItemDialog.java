@@ -2,11 +2,11 @@ package blue.koenig.kingsfamilylibrary.view;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class PickItemDialog {
     private ArrayAdapter<String> subAdapter;
     private String main;
 
-    public PickItemDialog(Context context, String title, List<String> items, /*@NotNull*/ PickListener listener) {
+    public PickItemDialog(Context context, String title, List<String> items, @NonNull PickListener listener) {
         this.context = context;
         this.listener = listener;
         this.title = title;
