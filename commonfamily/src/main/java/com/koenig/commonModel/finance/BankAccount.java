@@ -1,7 +1,10 @@
 package com.koenig.commonModel.finance;
 
+import com.koenig.FamilyConstants;
 import com.koenig.commonModel.Item;
 import com.koenig.commonModel.User;
+
+import org.joda.time.DateTime;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -14,6 +17,9 @@ import java.util.List;
 public class BankAccount extends Item {
     private List<User> owners;
     private String bank;
+    /**
+     * Sorted list where the first one is the newest
+     */
     private List<Balance> balances;
 
     public BankAccount(String id, String name, String bank, List<User> owners, List<Balance> balances) {
@@ -22,6 +28,7 @@ public class BankAccount extends Item {
         this.name = name;
         this.bank = bank;
         this.balances = balances;
+        sortBalances(balances);
     }
 
     public BankAccount(String id, String name, String bank, User owner, List<Balance> balances) {
@@ -43,8 +50,45 @@ public class BankAccount extends Item {
         sortBalances(balances);
     }
 
+    public BankAccount(ByteBuffer buffer) {
+        super(buffer);
+        short size = buffer.getShort();
+        this.owners = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            owners.add(new User(buffer));
+        }
+
+        bank = byteToString(buffer);
+        size = buffer.getShort();
+        balances = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            balances.add(new Balance(buffer));
+        }
+    }
+
     public static void sortBalances(List<Balance> balances) {
         Collections.sort(balances, (lhs, rhs) -> rhs.getDate().compareTo(lhs.getDate()));
+    }
+
+    @Override
+    public void writeBytes(ByteBuffer buffer) {
+        super.writeBytes(buffer);
+        writeList(owners, buffer);
+        writeString(bank, buffer);
+        writeList(balances, buffer);
+    }
+
+    public DateTime getDateTime() {
+        if (balances.size() == 0) {
+            return FamilyConstants.NO_DATE;
+        }
+
+        return balances.get(0).getDate();
+    }
+
+    public void addBalance(Balance balance) {
+        balances.add(balance);
+        sortBalances(balances);
     }
 
     @Override
@@ -60,17 +104,10 @@ public class BankAccount extends Item {
 
     @Override
     public int getByteLength() {
-        return super.getByteLength() + getListLength(owners) + getStringLength(name) + getStringLength(bank) + getListLength(balances);
+        return super.getByteLength() + getListLength(owners) + getStringLength(bank) + getListLength(balances);
     }
 
-    @Override
-    public void writeBytes(ByteBuffer buffer) {
-        super.writeBytes(buffer);
-        writeList(owners, buffer);
-        writeString(name, buffer);
-        writeString(bank, buffer);
-        writeList(balances, buffer);
-    }
+
 
     public List<Balance> getBalances() {
         return balances;
@@ -94,5 +131,27 @@ public class BankAccount extends Item {
 
     public void setBank(String bank) {
         this.bank = bank;
+    }
+
+    public int getBalance() {
+        if (balances.size() == 0) return 0;
+
+        return balances.get(0).getBalance();
+    }
+
+    public String toReadableString() {
+        return getBank() + " - " + getName();
+    }
+
+    public void deleteBalance(Balance balance) {
+        Balance removeBalance = null;
+        for (Balance bal : balances) {
+            if (bal.getDate().equals(balance.getDate())) {
+                removeBalance = bal;
+                break;
+            }
+        }
+
+        balances.remove(removeBalance);
     }
 }

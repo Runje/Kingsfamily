@@ -5,6 +5,8 @@ import com.koenig.commonModel.Item;
 import org.joda.time.DateTime;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Thomas on 23.12.2017.
@@ -32,6 +34,30 @@ public class Balance extends Item {
         date = byteToDateTime(buffer);
     }
 
+    public static List<Balance> getBalances(byte[] bytes) {
+        ByteBuffer buffer = ByteBuffer.wrap(bytes);
+        int size = buffer.getInt();
+        ArrayList<Balance> balances = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            balances.add(new Balance(buffer));
+        }
+
+        return balances;
+    }
+
+    public static byte[] listToBytes(List<Balance> balances) {
+        int size = 4;
+        for (Balance balance : balances) {
+            size += balance.getByteLength();
+        }
+
+        ByteBuffer buffer = ByteBuffer.allocate(size);
+        buffer.putInt(balances.size());
+        for (Balance balance : balances) {
+            balance.writeBytes(buffer);
+        }
+        return buffer.array();
+    }
     public int getBalance() {
         return balance;
     }

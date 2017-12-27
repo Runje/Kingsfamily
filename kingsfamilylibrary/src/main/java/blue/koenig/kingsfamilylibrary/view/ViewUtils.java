@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Point;
+import android.os.SystemClock;
 import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.DatePicker;
 
@@ -107,6 +109,14 @@ public class ViewUtils {
 
     public static int getScreenHeight(Activity activity) {
         return getScreenSize(activity).y;
+    }
+
+    public static void clickOn(final View view) {
+        view.postDelayed(() -> {
+            view.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, 0, 0, 0));
+            view.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP, 0, 0, 0));
+        }, 100);
+
     }
 
     public interface DateListener {

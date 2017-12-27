@@ -30,6 +30,11 @@ public class Family extends Item {
         }
     }
 
+    public Family(String id, String name, List<User> users) {
+        super(id, name);
+        this.users = users;
+    }
+
     @Override
     public int getByteLength() {
         return super.getByteLength() + getListLength(users);

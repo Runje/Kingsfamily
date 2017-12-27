@@ -1,8 +1,12 @@
 package com.koenig.commonModel.database;
 
 import com.koenig.commonModel.Item;
+import com.koenig.commonModel.User;
+import com.koenig.communication.messages.FamilyMessage;
 
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -27,7 +31,7 @@ public abstract class DatabaseTable<T extends Item> {
     public static final String FALSE_STRING = "0";
     public static final String TRUE_STRING = "1";
     public static final String STRING_LIST_SEPARATOR = ";";
-
+    protected Logger logger = LoggerFactory.getLogger(getClass().getSimpleName());
     protected ReentrantLock lock = new ReentrantLock();
 
     public static String buildStringList(List<String> list) {
@@ -150,4 +154,34 @@ public abstract class DatabaseTable<T extends Item> {
         columns.add(COLUMN_NAME);
         return columns;
     }
+
+    protected List<User> getUsers(UserService userService, String usersText) {
+        List<User> users = new ArrayList<>();
+        if (!usersText.isEmpty()) {
+            String[] userIds = usersText.split(FamilyMessage.SEPARATOR);
+            for (String id :
+                    userIds) {
+                try {
+                    users.add(userService.getUserFromId(id));
+                } catch (SQLException e) {
+                    // don't add user to result
+                    logger.error("Couldn't find user with id: " + id);
+                }
+            }
+        }
+
+        return users;
+    }
+
+    protected String usersToId(List<User> users) {
+        StringBuilder builder = new StringBuilder();
+        for (User user : users) {
+            builder.append(user.getId());
+            builder.append(FamilyMessage.SEPARATOR);
+        }
+
+        String result = users.size() > 0 ? builder.substring(0, builder.length() - 1) : "";
+        return result;
+    }
+
 }

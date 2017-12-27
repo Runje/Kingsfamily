@@ -5,7 +5,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.List;
@@ -23,14 +23,14 @@ public class PickItemDialog {
     protected String title;
     protected List<String> items;
     protected ListView listView;
-    protected ArrayAdapter<String> adapter;
+    protected MultiSelectArrayAdapter adapter;
     protected AlertDialog dialog;
-    private ListView sublistView;
-    private ArrayAdapter<String> subAdapter;
-    private String main;
+    private boolean multiselect;
 
-    public PickItemDialog(Context context, String title, List<String> items, @NonNull PickListener listener) {
+
+    public PickItemDialog(Context context, String title, List<String> items, boolean multiselect, @NonNull PickListener listener) {
         this.context = context;
+        this.multiselect = multiselect;
         this.listener = listener;
         this.title = title;
         this.items = items;
@@ -39,45 +39,42 @@ public class PickItemDialog {
     public void show() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final View layout = LayoutInflater.from(context).inflate(R.layout.pick_item, null);
-        adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, items);
-        subAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1);
+
         builder.setView(layout);
         builder.setTitle(title);
         builder.setNegativeButton(R.string.cancel, null);
+        builder.setPositiveButton(R.string.ok, (dialogInterface, i) -> {
+            listener.onMultiPick(adapter.getSelectedObjects());
+        });
         dialog = builder.create();
-        listView = layout.findViewById(R.id.listView_names);
-        listView.setAdapter(adapter);
-        sublistView = layout.findViewById(R.id.listView_subs);
-        sublistView.setAdapter(subAdapter);
-        modifyDialog(layout);
-        listView.setOnItemClickListener((parent, view, position, id) -> {
-            String item = adapter.getItem(position);
 
-            if (listener.hasSubs()) {
-                subAdapter.clear();
-                subAdapter.addAll(listener.getSubs(item));
-                main = item;
-            } else {
+
+        dialog.show();
+        Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        adapter = new MultiSelectArrayAdapter(context, android.R.layout.simple_list_item_1, items, (item -> {
+            if (!multiselect) {
                 listener.onPick(item);
                 dialog.cancel();
+            } else {
+
+                if (adapter.getSelectedObjects().size() > 0) {
+                    positiveButton.setEnabled(true);
+                } else {
+                    positiveButton.setEnabled(false);
+                }
             }
-        });
+        }));
+        listView = layout.findViewById(R.id.listView_names);
 
-        sublistView.setOnItemClickListener((adapterView, view, i, l) -> listener.onPickSub(main, subAdapter.getItem(i)));
-        dialog.show();
-    }
+        listView.setAdapter(adapter);
 
-    protected void modifyDialog(View layout) {
-        // For subclasses
+        positiveButton.setEnabled(false);
+
     }
 
     public interface PickListener {
         void onPick(String item);
 
-        String getSubs(String item);
-
-        boolean hasSubs();
-
-        void onPickSub(String main, String sub);
+        void onMultiPick(List<String> items);
     }
 }

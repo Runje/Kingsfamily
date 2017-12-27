@@ -1,9 +1,12 @@
 package com.koenig;
 
+import com.koenig.commonModel.User;
+
 import org.joda.time.DateTime;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -44,4 +47,13 @@ public class StringFormats {
     }
 
 
+    public static String usersToAbbreviationString(List<User> users) {
+        if (users.size() == 0) return "";
+        StringBuilder builder = new StringBuilder();
+        for (User user : users) {
+            builder.append(user.getAbbreviation() + ",");
+        }
+
+        return builder.substring(0, builder.length() - 1);
+    }
 }

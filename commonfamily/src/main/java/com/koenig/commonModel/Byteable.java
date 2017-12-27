@@ -1,6 +1,7 @@
 package com.koenig.commonModel;
 
 
+import com.koenig.commonModel.finance.BankAccount;
 import com.koenig.commonModel.finance.Expenses;
 import com.koenig.commonModel.finance.StandingOrder;
 
@@ -63,6 +64,8 @@ public abstract class Byteable {
                 return new StandingOrder(buffer);
             case USER:
                 return new User(buffer);
+            case BANKACCOUNT:
+                return new BankAccount(buffer);
         }
 
         throw new RuntimeException("Unsupported item: " + className.toString());
