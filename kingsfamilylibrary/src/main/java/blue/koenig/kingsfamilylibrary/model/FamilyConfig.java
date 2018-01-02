@@ -120,4 +120,22 @@ public class FamilyConfig {
         String membersString = Base64.encodeBytes(buffer.array());
         FamilyContentProvider.put(context, FAMILY_MEMBERS, membersString);
     }
+
+    public static void saveBytes(Context context, byte[] bytes, String key) {
+        String byteString = Base64.encodeBytes(bytes);
+        SharedPreferences preferences = context.getSharedPreferences(SPECIFIC_PREF, MODE_PRIVATE);
+        preferences.edit().putString(key, byteString).commit();
+    }
+
+    public static ByteBuffer getBytesFromConfig(Context context, String key) {
+        SharedPreferences preferences = context.getSharedPreferences(SPECIFIC_PREF, MODE_PRIVATE);
+        String byteString = preferences.getString(key, "");
+        if (byteString.equals("")) return null;
+        try {
+            return ByteBuffer.wrap(Base64.decode(byteString));
+        } catch (IOException e) {
+            logger.error("Error decoding bytes");
+            return null;
+        }
+    }
 }

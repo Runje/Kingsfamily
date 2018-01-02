@@ -1,6 +1,5 @@
 package blue.koenig.kingsfamilylibrary;
 
-import android.app.Application;
 import android.content.ComponentName;
 import android.content.ServiceConnection;
 import android.os.IBinder;
@@ -8,8 +7,6 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.multidex.MultiDexApplication;
-
-import com.koenig.StringFormats;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,7 +63,6 @@ public abstract class FamilyApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         logger.info("Create Application");
-        StringFormats.init();
         initDagger();
         familyAppComponent.inject(this);
 
@@ -112,12 +108,9 @@ public abstract class FamilyApplication extends MultiDexApplication {
         if (runningActivities > 0) {
             logger.info("Starting...");
             service = Executors.newScheduledThreadPool(1);
-            Runnable tryConnect = new Runnable() {
-                @Override
-                public void run() {
-                    if (!connection.isConnected()) {
-                        connection.connect();
-                    }
+            Runnable tryConnect = () -> {
+                if (!connection.isConnected()) {
+                    connection.connect();
                 }
             };
             service.scheduleAtFixedRate(tryConnect, 0, 1, TimeUnit.SECONDS);

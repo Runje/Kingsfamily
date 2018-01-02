@@ -133,9 +133,25 @@ public abstract class Byteable {
         }
     }
 
+    public static void writeBigList(List<? extends Byteable> byteables, ByteBuffer buffer) {
+        buffer.putInt(byteables.size());
+        for (Byteable byteable : byteables) {
+            byteable.writeBytes(buffer);
+        }
+    }
+
     public static int getListLength(List<? extends Byteable> byteables) {
         int size = 2;
         for (Byteable byteable : byteables) {
+            size += byteable.getByteLength();
+        }
+
+        return size;
+    }
+
+    public static int getBigListLength(List<? extends Byteable> list) {
+        int size = 4;
+        for (Byteable byteable : list) {
             size += byteable.getByteLength();
         }
 

@@ -16,18 +16,16 @@ import java.util.Locale;
 public class StringFormats {
 
     public static final String dayFormat = "dd.MM.yy";
-    private static final DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
-    private static DecimalFormat centFormat;
-    private static DecimalFormat euroFormat;
-    private static DecimalFormat percentFormat;
+    private static final DecimalFormatSymbols symbols = buildSymbols();
+    private static DecimalFormat centFormat = new DecimalFormat("0.00", symbols);
+    private static DecimalFormat euroFormat = new DecimalFormat("0", symbols);
+    private static DecimalFormat percentFormat = new DecimalFormat("0.#", symbols);
 
-    public static void init() {
+    private static DecimalFormatSymbols buildSymbols() {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
         symbols.setDecimalSeparator('.');
         symbols.setGroupingSeparator(',');
-
-        centFormat = new DecimalFormat("0.00", symbols);
-        euroFormat = new DecimalFormat("0", symbols);
-        percentFormat = new DecimalFormat("0.#", symbols);
+        return symbols;
     }
 
     public static String dateTimeToDayString(DateTime dateTime) {
