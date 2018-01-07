@@ -85,4 +85,12 @@ public class Balance extends Item {
         buffer.putInt(balance);
         writeDateTime(date, buffer);
     }
+
+    @Override
+    public String toString() {
+        return "Balance{" +
+                "balance=" + balance +
+                ", date=" + date +
+                '}';
+    }
 }

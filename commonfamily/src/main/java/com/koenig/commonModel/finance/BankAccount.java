@@ -67,6 +67,7 @@ public class BankAccount extends Item {
     }
 
     public static void sortBalances(List<Balance> balances) {
+        // newest at top
         Collections.sort(balances, (lhs, rhs) -> rhs.getDate().compareTo(lhs.getDate()));
     }
 

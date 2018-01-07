@@ -44,6 +44,21 @@ public abstract class Item extends Byteable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Item item = (Item) o;
+
+        return id.equals(item.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    @Override
     public int getByteLength() {
         return getStringLength(id) + getStringLength(name);
     }
