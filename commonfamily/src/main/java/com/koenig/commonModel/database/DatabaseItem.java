@@ -45,13 +45,13 @@ public class DatabaseItem<T extends Item> extends Byteable {
     }
 
     public DatabaseItem(ByteBuffer buffer) {
-        lastModifiedDate = byteToDateTime(buffer);
-        insertDate = byteToDateTime(buffer);
-        insertId = byteToString(buffer);
-        lastModifiedId = byteToString(buffer);
-        deleted = byteToBoolean(buffer);
+        lastModifiedDate = Companion.byteToDateTime(buffer);
+        insertDate = Companion.byteToDateTime(buffer);
+        insertId = Companion.byteToString(buffer);
+        lastModifiedId = Companion.byteToString(buffer);
+        deleted = Companion.byteToBoolean(buffer);
         // Eventuell static create erstellen
-        item = (T) byteToItem(buffer);
+        item = (T) Companion.byteToItem(buffer);
     }
 
     public boolean isDeleted() {
@@ -120,16 +120,16 @@ public class DatabaseItem<T extends Item> extends Byteable {
 
     @Override
     public int getByteLength() {
-        return getDateLength() * 2 + getStringLength(lastModifiedId) + getStringLength(insertId) + getBoolLength() + getItemLength(item);
+        return Companion.getDateLength() * 2 + Companion.getStringLength(lastModifiedId) + Companion.getStringLength(insertId) + getBoolLength() + Companion.getItemLength(item);
     }
 
     @Override
     public void writeBytes(ByteBuffer buffer) {
-        writeDateTime(lastModifiedDate, buffer);
-        writeDateTime(insertDate, buffer);
-        writeString(insertId, buffer);
-        writeString(lastModifiedId, buffer);
-        writeBool(deleted, buffer);
-        writeItem(item, buffer);
+        Companion.writeDateTime(lastModifiedDate, buffer);
+        Companion.writeDateTime(insertDate, buffer);
+        Companion.writeString(insertId, buffer);
+        Companion.writeString(lastModifiedId, buffer);
+        Companion.writeBool(deleted, buffer);
+        Companion.writeItem(item, buffer);
     }
 }

@@ -37,8 +37,8 @@ public class BookkeepingEntry extends Item {
 
     public BookkeepingEntry(ByteBuffer buffer) {
         super(buffer);
-        category = byteToString(buffer);
-        subCategory = byteToString(buffer);
+        category = Companion.byteToString(buffer);
+        subCategory = Companion.byteToString(buffer);
         costs = buffer.getInt();
         costDistribution = new CostDistribution(buffer);
     }
@@ -82,14 +82,14 @@ public class BookkeepingEntry extends Item {
 
     @Override
     public int getByteLength() {
-        return super.getByteLength() + getStringLength(category) + getStringLength(subCategory) + 4 + costDistribution.getByteLength();
+        return super.getByteLength() + Companion.getStringLength(category) + Companion.getStringLength(subCategory) + 4 + costDistribution.getByteLength();
     }
 
     @Override
     public void writeBytes(ByteBuffer buffer) {
         super.writeBytes(buffer);
-        buffer.put(stringToByte(category));
-        buffer.put(stringToByte(subCategory));
+        buffer.put(Companion.stringToByte(category));
+        buffer.put(Companion.stringToByte(subCategory));
         buffer.putInt(costs);
         costDistribution.writeBytes(buffer);
     }

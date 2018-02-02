@@ -7,14 +7,14 @@ public enum Component {
 
 
     public static Component read(ByteBuffer buffer) {
-        return Component.valueOf(Byteable.byteToString(buffer));
+        return Component.valueOf(Byteable.Companion.byteToString(buffer));
     }
 
     public byte[] toBytes() {
-        return Byteable.stringToByte(name());
+        return Byteable.Companion.stringToByte(name());
     }
 
     public int getBytesLength() {
-        return Byteable.getStringLength(name());
+        return Byteable.Companion.getStringLength(name());
     }
 }

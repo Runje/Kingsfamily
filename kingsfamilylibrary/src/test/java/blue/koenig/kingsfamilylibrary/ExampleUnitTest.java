@@ -34,8 +34,8 @@ public class ExampleUnitTest {
         List<User> members = new ArrayList<>(2);
         members.add(milena);
         members.add(thomas);
-        ByteBuffer buffer = ByteBuffer.allocate(Byteable.getListLength(members));
-        Byteable.writeList(members, buffer);
+        ByteBuffer buffer = ByteBuffer.allocate(Byteable.Companion.getListLength(members));
+        Byteable.Companion.writeList(members, buffer);
 
         String membersString = Base64.encodeBytes(buffer.array());
         ByteBuffer byteBuffer = ByteBuffer.wrap(Base64.decode(membersString));

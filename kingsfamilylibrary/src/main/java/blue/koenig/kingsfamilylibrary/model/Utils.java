@@ -17,18 +17,18 @@ public class Utils {
 
     public static String dateToString(DateTime dateTime) {
         if (dateTime.getMillis() == 0) {
-            return FamilyConfig.NEVER;
+            return FamilyConfig.INSTANCE.getNEVER();
         }
 
-        return dateTime.toString(FamilyConfig.DATE_FORMAT);
+        return dateTime.toString(FamilyConfig.INSTANCE.getDATE_FORMAT());
     }
 
     public static DateTime stringToDateTime(String date) {
-        if (date.equals(FamilyConfig.NEVER)) {
+        if (date.equals(FamilyConfig.INSTANCE.getNEVER())) {
             return FamilyConstants.NO_DATE;
         }
 
-        return DateTime.parse(date, FamilyConfig.DATE_FORMAT);
+        return DateTime.parse(date, FamilyConfig.INSTANCE.getDATE_FORMAT());
     }
 
     public static boolean isAppInstalled(Context context, String uri) {
@@ -44,7 +44,7 @@ public class Utils {
 
     public static void setUserId(ServerConnection connection, Context context, String userId) {
         Installation.setId(context, userId);
-        FamilyConfig.saveUserId(userId, context);
+        FamilyConfig.INSTANCE.saveUserId(userId, context);
         connection.setFromId(userId);
     }
 }

@@ -57,9 +57,9 @@ public class User extends Item {
 
     public User(ByteBuffer buffer) {
         super(buffer);
-        abbreviation = byteToString(buffer);
-        family = byteToString(buffer);
-        birthday = byteToDateTime(buffer);
+        abbreviation = Companion.byteToString(buffer);
+        family = Companion.byteToString(buffer);
+        birthday = Companion.byteToDateTime(buffer);
         permissions = bytesToPermissions(buffer);
     }
 
@@ -129,14 +129,14 @@ public class User extends Item {
 
     @Override
     public int getByteLength() {
-        return super.getByteLength() + getStringLength(abbreviation) + getStringLength(family) + getDateLength() + getPermissionLength(permissions);
+        return super.getByteLength() + Companion.getStringLength(abbreviation) + Companion.getStringLength(family) + Companion.getDateLength() + getPermissionLength(permissions);
     }
 
     public void writeBytes(ByteBuffer buffer) {
         super.writeBytes(buffer);
-        buffer.put(stringToByte(abbreviation));
-        buffer.put(stringToByte(family));
-        buffer.put(dateTimeToBytes(birthday));
+        buffer.put(Companion.stringToByte(abbreviation));
+        buffer.put(Companion.stringToByte(family));
+        buffer.put(Companion.dateTimeToBytes(birthday));
         buffer.put(permissionsToBytes(permissions));
     }
 

@@ -9,29 +9,26 @@ import java.nio.ByteBuffer;
 public class Operation<T extends Item> extends Item {
 
 
-    private ItemType itemType;
     private Operator operator;
     private T item;
 
 
     public Operation(String id, Operator operator, T item) {
         super(id, item.getName());
-        itemType = ItemType.fromItem(item);
         this.operator = operator;
         this.item = item;
     }
 
     public Operation(Operator operator, T item) {
         super(item.getName());
-        itemType = ItemType.fromItem(item);
         this.operator = operator;
         this.item = item;
     }
 
     public Operation(ByteBuffer buffer) {
         super(buffer);
-        operator = byteToEnum(buffer, Operator.class);
-        item = (T) byteToItem(buffer);
+        operator = Companion.byteToEnum(buffer, Operator.class);
+        item = (T) Companion.byteToItem(buffer);
     }
 
     public static Operation createAdd(Item item) {
@@ -56,13 +53,13 @@ public class Operation<T extends Item> extends Item {
 
     @Override
     public int getByteLength() {
-        return super.getByteLength() + Byteable.getEnumLength(operator) + Byteable.getItemLength(item);
+        return super.getByteLength() + Byteable.Companion.getEnumLength(operator) + Byteable.Companion.getItemLength(item);
     }
 
     @Override
     public void writeBytes(ByteBuffer buffer) {
         super.writeBytes(buffer);
-        Byteable.writeEnum(operator, buffer);
-        Byteable.writeItem(item, buffer);
+        Byteable.Companion.writeEnum(operator, buffer);
+        Byteable.Companion.writeItem(item, buffer);
     }
 }

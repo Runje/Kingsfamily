@@ -29,7 +29,7 @@ public class AskForUpdatesMessage extends FamilyMessage {
         this.fromId = fromId;
         this.toId = toId;
         this.lastSyncDate = new DateTime(buffer.getLong());
-        this.updateType = Byteable.byteToEnum(buffer, ItemType.class);
+        this.updateType = Byteable.Companion.byteToEnum(buffer, ItemType.class);
     }
 
     public static AskForUpdatesMessage askForExpenses(DateTime lastSyncDate) {
@@ -59,13 +59,13 @@ public class AskForUpdatesMessage extends FamilyMessage {
 
     @Override
     protected int getContentLength() {
-        return Byteable.getDateLength() + Byteable.getEnumLength(updateType);
+        return Byteable.Companion.getDateLength() + Byteable.Companion.getEnumLength(updateType);
     }
 
     @Override
     protected void writeContent(ByteBuffer buffer) {
-        Byteable.writeDateTime(lastSyncDate, buffer);
-        Byteable.writeEnum(updateType, buffer);
+        Byteable.Companion.writeDateTime(lastSyncDate, buffer);
+        Byteable.Companion.writeEnum(updateType, buffer);
     }
 
     @Override

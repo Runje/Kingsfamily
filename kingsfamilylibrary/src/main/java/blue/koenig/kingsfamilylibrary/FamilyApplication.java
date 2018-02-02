@@ -1,8 +1,5 @@
 package blue.koenig.kingsfamilylibrary;
 
-import android.content.ComponentName;
-import android.content.ServiceConnection;
-import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
@@ -20,7 +17,6 @@ import javax.inject.Inject;
 import blue.koenig.kingsfamilylibrary.dagger.AppModule;
 import blue.koenig.kingsfamilylibrary.dagger.DaggerFamilyAppComponent;
 import blue.koenig.kingsfamilylibrary.dagger.FamilyAppComponent;
-import blue.koenig.kingsfamilylibrary.model.communication.ConnectionService;
 import blue.koenig.kingsfamilylibrary.model.communication.ServerConnection;
 import blue.koenig.kingsfamilylibrary.view.family.LoginHandler;
 
@@ -36,21 +32,20 @@ public abstract class FamilyApplication extends MultiDexApplication {
     LoginHandler loginHandler;
     Messenger messenger;
     boolean serviceIsBound;
-    private ServiceConnection serviceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder service) {
-            messenger = new Messenger(service);
+    /**
+     private ServiceConnection serviceConnection = new ServiceConnection() {
+    @Override public void onServiceConnected(ComponentName componentName, IBinder service) {
+    messenger = new Messenger(service);
 
-            serviceIsBound = true;
-            connection = ((ConnectionService) service).getServerConnection();
-        }
+    serviceIsBound = true;
+    connection = ((ConnectionService) service).getServerConnection();
+    }
 
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-            messenger = null;
-            serviceIsBound = false;
-        }
-    };
+    @Override public void onServiceDisconnected(ComponentName componentName) {
+    messenger = null;
+    serviceIsBound = false;
+    }
+    };**/
     private Logger logger = LoggerFactory.getLogger(getClass().getSimpleName());
     private ScheduledExecutorService service;
     private int runningActivities;
@@ -95,11 +90,12 @@ public abstract class FamilyApplication extends MultiDexApplication {
             logger.info("No more activities active, closing connection");
             connection.disconnect();
             service.shutdown();
-            // Unbind from the service
-            if (serviceIsBound) {
-                unbindService(serviceConnection);
-                serviceIsBound = false;
-            }
+            /**
+             // Unbind from the service
+             if (serviceIsBound) {
+             unbindService(serviceConnection);
+             serviceIsBound = false;
+             }**/
         }
     }
 

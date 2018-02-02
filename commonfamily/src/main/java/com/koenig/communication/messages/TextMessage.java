@@ -28,7 +28,7 @@ public class TextMessage extends FamilyMessage {
         this.version = version;
         this.fromId = fromId;
         this.toId = toId;
-        this.text = Byteable.byteToString(buffer);
+        this.text = Byteable.Companion.byteToString(buffer);
     }
 
     public String getText() {
@@ -41,12 +41,12 @@ public class TextMessage extends FamilyMessage {
 
     @Override
     protected int getContentLength() {
-        return Byteable.getStringLength(text);
+        return Byteable.Companion.getStringLength(text);
     }
 
     @Override
     protected void writeContent(ByteBuffer buffer) {
-        buffer.put(Byteable.stringToByte(text));
+        buffer.put(Byteable.Companion.stringToByte(text));
     }
 
     @Override

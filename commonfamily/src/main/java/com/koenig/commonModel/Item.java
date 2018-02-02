@@ -23,8 +23,8 @@ public abstract class Item extends Byteable {
     }
 
     public Item(ByteBuffer buffer) {
-        id = byteToString(buffer);
-        name = byteToString(buffer);
+        id = Companion.byteToString(buffer);
+        name = Companion.byteToString(buffer);
     }
 
     public String getName() {
@@ -60,13 +60,13 @@ public abstract class Item extends Byteable {
 
     @Override
     public int getByteLength() {
-        return getStringLength(id) + getStringLength(name);
+        return Companion.getStringLength(id) + Companion.getStringLength(name);
     }
 
     @Override
     public void writeBytes(ByteBuffer buffer) {
-        buffer.put(stringToByte(id));
-        writeString(name, buffer);
+        buffer.put(Companion.stringToByte(id));
+        Companion.writeString(name, buffer);
     }
 
 }

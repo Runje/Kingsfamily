@@ -58,7 +58,7 @@ public class BankAccount extends Item {
             owners.add(new User(buffer));
         }
 
-        bank = byteToString(buffer);
+        bank = Companion.byteToString(buffer);
         size = buffer.getShort();
         balances = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
@@ -74,9 +74,9 @@ public class BankAccount extends Item {
     @Override
     public void writeBytes(ByteBuffer buffer) {
         super.writeBytes(buffer);
-        writeList(owners, buffer);
-        writeString(bank, buffer);
-        writeList(balances, buffer);
+        Companion.writeList(owners, buffer);
+        Companion.writeString(bank, buffer);
+        Companion.writeList(balances, buffer);
     }
 
     public DateTime getDateTime() {
@@ -105,7 +105,7 @@ public class BankAccount extends Item {
 
     @Override
     public int getByteLength() {
-        return super.getByteLength() + getListLength(owners) + getStringLength(bank) + getListLength(balances);
+        return super.getByteLength() + Companion.getListLength(owners) + Companion.getStringLength(bank) + Companion.getListLength(balances);
     }
 
 

@@ -6,7 +6,7 @@ package com.koenig;
 
 public class FamilyUtils {
     public static int getHalfRoundDown(int costsInCent) {
-        return costsInCent / 2;
+        return (int) Math.floor(costsInCent / 2.0);
     }
 
     public static int getHalfRoundUp(int costsInCent) {

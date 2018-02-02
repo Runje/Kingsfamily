@@ -27,8 +27,8 @@ public class CreateUserMessage extends FamilyMessage {
 
     public CreateUserMessage(int version, Component component, String fromId, String toId, ByteBuffer buffer) {
         super(version, component, fromId, toId);
-        userName = Byteable.byteToString(buffer);
-        birthday = Byteable.byteToDateTime(buffer);
+        userName = Byteable.Companion.byteToString(buffer);
+        birthday = Byteable.Companion.byteToDateTime(buffer);
     }
 
     public String getUserName() {
@@ -46,13 +46,13 @@ public class CreateUserMessage extends FamilyMessage {
 
     @Override
     protected int getContentLength() {
-        return Byteable.getStringLength(userName) + Byteable.getDateLength();
+        return Byteable.Companion.getStringLength(userName) + Byteable.Companion.getDateLength();
     }
 
     @Override
     protected void writeContent(ByteBuffer buffer) {
-        buffer.put(Byteable.stringToByte(userName));
-        buffer.put(Byteable.dateTimeToBytes(birthday));
+        buffer.put(Byteable.Companion.stringToByte(userName));
+        buffer.put(Byteable.Companion.dateTimeToBytes(birthday));
     }
 
     @Override

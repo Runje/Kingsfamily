@@ -31,7 +31,7 @@ public class Balance extends Item {
     public Balance(ByteBuffer buffer) {
         super(buffer);
         balance = buffer.getInt();
-        date = byteToDateTime(buffer);
+        date = Companion.byteToDateTime(buffer);
     }
 
     public static List<Balance> getBalances(byte[] bytes) {
@@ -76,14 +76,14 @@ public class Balance extends Item {
 
     @Override
     public int getByteLength() {
-        return super.getByteLength() + 4 + getDateLength();
+        return super.getByteLength() + 4 + Companion.getDateLength();
     }
 
     @Override
     public void writeBytes(ByteBuffer buffer) {
         super.writeBytes(buffer);
         buffer.putInt(balance);
-        writeDateTime(date, buffer);
+        Companion.writeDateTime(date, buffer);
     }
 
     @Override

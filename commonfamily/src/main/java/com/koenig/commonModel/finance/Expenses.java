@@ -30,8 +30,8 @@ public class Expenses extends BookkeepingEntry {
 
     public Expenses(ByteBuffer buffer) {
         super(buffer);
-        date = byteToDateTime(buffer);
-        standingOrder = byteToString(buffer);
+        date = Companion.byteToDateTime(buffer);
+        standingOrder = Companion.byteToString(buffer);
     }
 
     public DateTime getDate() {
@@ -52,14 +52,14 @@ public class Expenses extends BookkeepingEntry {
 
     @Override
     public int getByteLength() {
-        return super.getByteLength() + getDateLength() + getStringLength(standingOrder);
+        return super.getByteLength() + Companion.getDateLength() + Companion.getStringLength(standingOrder);
     }
 
     @Override
     public void writeBytes(ByteBuffer buffer) {
         super.writeBytes(buffer);
-        buffer.put(dateTimeToBytes(date));
-        buffer.put(stringToByte(standingOrder));
+        buffer.put(Companion.dateTimeToBytes(date));
+        buffer.put(Companion.stringToByte(standingOrder));
     }
 
     @Override

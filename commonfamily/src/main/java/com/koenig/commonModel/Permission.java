@@ -17,11 +17,11 @@ public enum Permission {
     }
 
     public static Permission read(ByteBuffer buffer) {
-        return Permission.valueOf(Byteable.byteToString(buffer));
+        return Permission.valueOf(Byteable.Companion.byteToString(buffer));
     }
 
     public void write(ByteBuffer buffer) {
-        buffer.put(Byteable.stringToByte(name()));
+        buffer.put(Byteable.Companion.stringToByte(name()));
     }
 
 }

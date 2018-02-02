@@ -41,7 +41,7 @@ public abstract class Database {
      * @throws SQLException
      */
     protected void startTransaction(Transaction runnable, DatabaseTable table) throws SQLException {
-        table.lock.lock();
+        table.getLock().lock();
         try {
             connection.setAutoCommit(false);
             runnable.run();
@@ -53,7 +53,7 @@ public abstract class Database {
             throw e;
         } finally {
             connection.setAutoCommit(true);
-            table.lock.unlock();
+            table.getLock().unlock();
         }
     }
 
@@ -65,7 +65,7 @@ public abstract class Database {
      */
     protected void startTransaction(Transaction runnable) throws SQLException {
         for (DatabaseTable table : tables) {
-            table.lock.lock();
+            table.getLock().lock();
         }
         try {
             connection.setAutoCommit(false);
@@ -79,7 +79,7 @@ public abstract class Database {
         } finally {
             connection.setAutoCommit(true);
             for (DatabaseTable table : tables) {
-                table.lock.unlock();
+                table.getLock().unlock();
             }
         }
     }

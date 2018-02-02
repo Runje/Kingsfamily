@@ -26,9 +26,9 @@ public class Parser {
     public static FamilyMessage parse(ByteBuffer buffer) {
         int version = buffer.getInt();
         Component component = Component.read(buffer);
-        String name = Byteable.byteToString(buffer);
-        String fromId = Byteable.byteToString(buffer);
-        String toId = Byteable.byteToString(buffer);
+        String name = Byteable.Companion.byteToString(buffer);
+        String fromId = Byteable.Companion.byteToString(buffer);
+        String toId = Byteable.Companion.byteToString(buffer);
         //DateTime timestamp = new DateTime(buffer.getLong());
 
         FamilyMessage msg = null;

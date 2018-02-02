@@ -37,14 +37,14 @@ public class Family extends Item {
 
     @Override
     public int getByteLength() {
-        return super.getByteLength() + getListLength(users);
+        return super.getByteLength() + Companion.getListLength(users);
     }
 
 
     @Override
     public void writeBytes(ByteBuffer buffer) {
         super.writeBytes(buffer);
-        writeList(users, buffer);
+        Companion.writeList(users, buffer);
     }
 
 

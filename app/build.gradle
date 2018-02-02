@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 27
@@ -24,6 +26,10 @@ android {
     }
 }
 
+kapt {
+    generateStubs = true
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -38,7 +44,7 @@ dependencies {
     implementation project(':kingsfamilylibrary')
     implementation project(':tcpcommunication')
     // Dependency Injection
-    annotationProcessor  "com.google.dagger:dagger-compiler:2.13"
+    kapt  "com.google.dagger:dagger-compiler:2.13"
     implementation "com.google.dagger:dagger:2.13"
     compileOnly 'javax.annotation:jsr250-api:1.0'
     implementation 'org.slf4j:slf4j-android:1.7.22'

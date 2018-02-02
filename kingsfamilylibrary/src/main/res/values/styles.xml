@@ -53,7 +53,7 @@
         <item name="android:textColor">@color/normalText</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">@dimen/decimal_costs_width</item>
-        <item name="android:inputType">numberDecimal</item>
+        <item name="android:inputType">numberSigned|numberDecimal</item>
     </style>
 
 </resources>

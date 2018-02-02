@@ -42,7 +42,7 @@ public abstract class FamilyMessage implements Message {
 
     public int getTotalLength()
     {
-        int length = 4 + 4 + component.getBytesLength() + Byteable.getStringLength(getName()) + Byteable.getStringLength(fromId) + Byteable.getStringLength(toId)
+        int length = 4 + 4 + component.getBytesLength() + Byteable.Companion.getStringLength(getName()) + Byteable.Companion.getStringLength(fromId) + Byteable.Companion.getStringLength(toId)
                 + getContentLength();
         return length;
     }
@@ -83,9 +83,9 @@ public abstract class FamilyMessage implements Message {
         buffer.putInt(getTotalLength());
         buffer.putInt(version);
         buffer.put(component.toBytes());
-        buffer.put(Byteable.stringToByte(getName()));
-        buffer.put(Byteable.stringToByte(fromId));
-        buffer.put(Byteable.stringToByte(toId));
+        buffer.put(Byteable.Companion.stringToByte(getName()));
+        buffer.put(Byteable.Companion.stringToByte(fromId));
+        buffer.put(Byteable.Companion.stringToByte(toId));
     }
 
     public ByteBuffer getBuffer()

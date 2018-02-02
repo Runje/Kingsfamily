@@ -61,7 +61,7 @@ public class ConverterTests {
     @Test
     public void permissions() {
         Permission permission = Permission.NONE;
-        ByteBuffer buffer = ByteBuffer.allocate(Byteable.getStringLength(permission.name()));
+        ByteBuffer buffer = ByteBuffer.allocate(Byteable.Companion.getStringLength(permission.name()));
         permission.write(buffer);
         buffer.flip();
         Permission read = Permission.read(buffer);
