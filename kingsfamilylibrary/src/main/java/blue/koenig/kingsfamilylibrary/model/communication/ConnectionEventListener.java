@@ -6,6 +6,8 @@ import com.koenig.communication.messages.FamilyMessage;
  * Created by Thomas on 12.01.2017.
  */
 public interface ConnectionEventListener {
+
+    // TODO: make both observables!
     void onConnectionStatusChange(boolean connected);
 
     /**

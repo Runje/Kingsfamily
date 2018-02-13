@@ -35,6 +35,11 @@ object FamilyConfig {
     private val logger = LoggerFactory.getLogger("FamilyConfig")
     private var userId = NO_ID
 
+    val userIdObservable = BehaviorSubject.create<String>()
+
+    fun init(context: Context) {
+        userIdObservable.onNext(getUserId(context))
+    }
 
     /**
      * Gets the userId of the User.
@@ -59,6 +64,7 @@ object FamilyConfig {
         logger.info("Setting user id to " + userId)
         FamilyContentProvider.put(context, USERID, userId)
         FamilyConfig.userId = userId
+        userIdObservable.onNext(userId)
     }
 
     /**

@@ -5,7 +5,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'joda-time:joda-time:2.9.9'
     implementation 'org.slf4j:slf4j-api:1.7.22'
-
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.8'
 
     implementation project(':tcpcommunication')
     implementation 'junit:junit:4.12'

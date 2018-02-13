@@ -17,6 +17,7 @@ import javax.inject.Inject;
 import blue.koenig.kingsfamilylibrary.dagger.AppModule;
 import blue.koenig.kingsfamilylibrary.dagger.DaggerFamilyAppComponent;
 import blue.koenig.kingsfamilylibrary.dagger.FamilyAppComponent;
+import blue.koenig.kingsfamilylibrary.model.FamilyConfig;
 import blue.koenig.kingsfamilylibrary.model.communication.ServerConnection;
 import blue.koenig.kingsfamilylibrary.view.family.LoginHandler;
 
@@ -58,6 +59,7 @@ public abstract class FamilyApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         logger.info("Create Application");
+        FamilyConfig.INSTANCE.init(this);
         initDagger();
         familyAppComponent.inject(this);
 

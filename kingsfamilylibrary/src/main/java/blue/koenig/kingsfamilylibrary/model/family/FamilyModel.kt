@@ -25,6 +25,7 @@ import java.util.*
  * Created by Thomas on 18.10.2017.
  */
 
+@Suppress("UNUSED_PARAMETER")
 abstract class FamilyModel(protected var connection: ServerConnection, protected var context: Context, protected var loginHandler: LoginHandler) : ConnectionEventListener, LoginListener {
     protected var logger = LoggerFactory.getLogger(javaClass.simpleName)
     protected var plugins: MutableList<Plugin> = ArrayList()
@@ -57,9 +58,7 @@ abstract class FamilyModel(protected var connection: ServerConnection, protected
     }
 
     fun importUser(userId: String) {
-        var userId = userId
-        userId = userId.trim { it <= ' ' }
-        setUserId(userId)
+        setUserId(userId.trim())
         connection.sendFamilyMessage(FamilyTextMessages.loginMessage())
     }
 
@@ -84,7 +83,7 @@ abstract class FamilyModel(protected var connection: ServerConnection, protected
 
     override fun onFamilyMembers(members: List<User>) {
         updateFamilymembers(members)
-        start()
+        startLoggedIn()
     }
 
     override fun onFamilyMembersFailed() {
@@ -178,7 +177,10 @@ abstract class FamilyModel(protected var connection: ServerConnection, protected
     protected abstract fun updateFamilymembers(members: List<User>)
 
 
-    protected abstract fun start()
+    /**
+     * Will be called after login procedures is done.
+     */
+    protected abstract fun startLoggedIn()
 
     protected open fun processFinanceCommand(words: Array<String>) {
         // to be overridden in subclass
@@ -252,17 +254,20 @@ abstract class FamilyModel(protected var connection: ServerConnection, protected
         logger.info("Resume")
         view.showConnectionStatus(connection.isConnected)
         (context.applicationContext as FamilyApplication).start()
+        start()
         if (!loginHandler.isLoggingIn) {
 
             if (!loginHandler.isLogin) {
                 loginHandler.login()
             } else {
-                start()
+                startLoggedIn()
             }
         } else {
             logger.info("Login is already in process...")
         }
     }
+
+    protected abstract fun start()
 
     fun stop() {
         logger.info("Pause")

@@ -26,9 +26,10 @@ abstract class DatabaseTable<T : Item> {
     abstract fun isExisting(): Boolean
 
     val allItems: List<T>
-        @Throws(SQLException::class)
         get() = toItemList(getAll())
 
+    val allItemsObservable = BehaviorSubject.create<List<T>>()
+    val hasChanged = BehaviorSubject.create<Boolean>()
     protected abstract val columnNames: List<String>
 
     /**
@@ -68,17 +69,12 @@ abstract class DatabaseTable<T : Item> {
     abstract fun deleteAllEntrys()
 
     @Throws(SQLException::class)
-    abstract fun deleteFrom(itemId: String, userId: String)
-
-    @Throws(SQLException::class)
-    abstract fun updateFrom(item: T, userId: String)
-
-    @Throws(SQLException::class)
     fun addFrom(item: T, userId: String) {
         runInLock(Database.Transaction {
             val now = DateTime.now()
             val databaseItem = DatabaseItem(item, now, now, false, userId, userId)
             add(databaseItem)
+            hasChanged.onNext(true)
         })
     }
 
@@ -101,6 +97,11 @@ abstract class DatabaseTable<T : Item> {
         } finally {
             lock.unlock()
         }
+    }
+
+    @Throws(SQLException::class)
+    protected fun <X> runInLockWithResult(runnable: () -> X): X {
+        return runInLockWithResult(Database.ResultTransaction<X>(runnable))
     }
 
     @Throws(SQLException::class)

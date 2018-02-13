@@ -1,7 +1,6 @@
 package blue.koenig.kingsfamilylibrary.view.family
 
 import android.app.AlertDialog
-import android.os.Bundle
 import android.support.annotation.StringRes
 import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
@@ -17,6 +16,7 @@ import org.slf4j.LoggerFactory
  * Created by Thomas on 18.10.2017.
  */
 
+@Suppress("DEPRECATION")
 abstract class FamilyActivity : AppCompatActivity(), FamilyView {
 
     protected var connectionStatus: TextView? = null
@@ -50,11 +50,6 @@ abstract class FamilyActivity : AppCompatActivity(), FamilyView {
 
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        model = createModel()
-    }
-
     protected abstract fun createModel(): FamilyModel
 
     override fun askForNameOrImport() {
@@ -82,12 +77,12 @@ abstract class FamilyActivity : AppCompatActivity(), FamilyView {
             val layout = LayoutInflater.from(this@FamilyActivity).inflate(R.layout.enter_name, null)
             builder.setView(layout)
             val editName = layout.findViewById<EditText>(R.id.editTextName)
-            builder.setPositiveButton(R.string.createFamily) { dialog, which ->
+            builder.setPositiveButton(R.string.createFamily) { _, _ ->
                 val name = editName.text.toString()
                 model.createFamily(name)
             }
 
-            builder.setNegativeButton(R.string.joinFamily) { dialog, which ->
+            builder.setNegativeButton(R.string.joinFamily) { _, _ ->
                 val name = editName.text.toString()
                 model.joinFamily(name)
             }
