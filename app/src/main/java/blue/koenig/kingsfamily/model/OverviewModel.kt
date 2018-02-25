@@ -4,6 +4,7 @@ import android.content.Context
 import blue.koenig.kingsfamily.view.NullOverviewView
 import blue.koenig.kingsfamily.view.OverviewView
 import blue.koenig.kingsfamilylibrary.R
+import blue.koenig.kingsfamilylibrary.model.FamilyConfig
 import blue.koenig.kingsfamilylibrary.model.Utils
 import blue.koenig.kingsfamilylibrary.model.communication.ConnectionEventListener
 import blue.koenig.kingsfamilylibrary.model.communication.ServerConnection
@@ -19,7 +20,10 @@ import javax.inject.Inject
  */
 
 class OverviewModel @Inject
-constructor(connection: ServerConnection, context: Context, handler: LoginHandler) : FamilyModel(connection, context, handler), ConnectionEventListener {
+constructor(connection: ServerConnection, context: Context, handler: LoginHandler, config: FamilyConfig) : FamilyModel(connection, context, handler, config), ConnectionEventListener {
+    override fun startLoggedIn() {
+
+    }
 
     internal val overviewView: OverviewView
         get() = view as OverviewView

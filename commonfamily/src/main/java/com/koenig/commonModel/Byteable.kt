@@ -5,6 +5,7 @@ import com.koenig.commonModel.finance.BankAccount
 import com.koenig.commonModel.finance.Expenses
 import com.koenig.commonModel.finance.StandingOrder
 import org.joda.time.DateTime
+import org.joda.time.YearMonth
 import java.io.UnsupportedEncodingException
 import java.nio.ByteBuffer
 import java.nio.charset.Charset
@@ -14,12 +15,12 @@ import java.util.*
  * Created by Thomas on 28.10.2017.
  */
 
-abstract class Byteable {
+interface Byteable {
 
     val boolLength: Int
         get() = 1
 
-    abstract val byteLength: Int
+    val byteLength: Int
 
     val bytes: ByteArray
         get() {
@@ -28,7 +29,7 @@ abstract class Byteable {
             return buffer.array()
         }
 
-    abstract fun writeBytes(buffer: ByteBuffer)
+    fun writeBytes(buffer: ByteBuffer)
 
     companion object {
         const val encoding = "ISO-8859-1"
@@ -142,7 +143,7 @@ abstract class Byteable {
             }
         }
 
-        fun <T : Byteable> writeBigList(byteables: List<T>, buffer: ByteBuffer) {
+        fun <T : Byteable> writeBigList(byteables: Collection<T>, buffer: ByteBuffer) {
             buffer.putInt(byteables.size)
             for (byteable in byteables) {
                 byteable.writeBytes(buffer)
@@ -158,13 +159,8 @@ abstract class Byteable {
             return size
         }
 
-        fun <T : Byteable> getBigListLength(list: List<T>): Int {
-            var size = 4
-            for (byteable in list) {
-                size += byteable.byteLength
-            }
-
-            return size
+        fun <T : Byteable> getBigListLength(list: Collection<T>): Int {
+            return 4 + list.sumBy { it.byteLength }
         }
 
         fun goalsToByte(goals: Map<Int, Int>): ByteArray {
@@ -186,38 +182,9 @@ abstract class Byteable {
             return buffer.goals
         }
 
-        val ByteBuffer.string: String
-            get() {
-                return Byteable.byteToString(this)
-            }
 
-        val ByteBuffer.goals: MutableMap<Int, Int>
-            get() {
-                val size = short
-                val goals = HashMap<Int, Int>(size.toInt())
-                for (i in 1..size) {
-                    goals[int] = int
-                }
 
-                return goals
-            }
 
-        val String.byteLength: Int
-            get() = Byteable.getStringLength(this)
-
-        fun ByteBuffer.putString(text: String) {
-            Byteable.writeString(text, this)
-        }
-
-        fun ByteBuffer.putDateTime(date: DateTime) {
-            Byteable.writeDateTime(date, this)
-        }
-
-        val DateTime.byteLength: Int
-            get() = dateLength
-
-        val ByteBuffer.dateTime: DateTime
-            get() = Byteable.byteToDateTime(this)
 
         fun write(map: Map<DateTime, String>, buffer: ByteBuffer) {
             buffer.putShort(map.size.toShort())
@@ -251,5 +218,55 @@ abstract class Byteable {
             return result
         }
 
+        const val boolLength: Int = 1
+
     }
+}
+
+val ByteBuffer.string: String
+    get() {
+        return Byteable.byteToString(this)
+    }
+
+fun YearMonth.writeBytes(buffer: ByteBuffer) {
+    buffer.put(monthOfYear.toByte())
+    buffer.putShort(year.toShort())
+}
+
+val ByteBuffer.yearMonth: YearMonth
+    get() = YearMonth(get().toInt(), short.toInt())
+
+val ByteBuffer.goals: MutableMap<Int, Int>
+    get() {
+        val size = short
+        val goals = HashMap<Int, Int>(size.toInt())
+        for (i in 1..size) {
+            goals[int] = int
+        }
+
+        return goals
+    }
+
+val String.byteLength: Int
+    get() = Byteable.getStringLength(this)
+
+val DateTime.byteLength: Int
+    get() = Byteable.dateLength
+
+val ByteBuffer.dateTime: DateTime
+    get() = Byteable.byteToDateTime(this)
+
+val ByteBuffer.boolean: Boolean
+    get () = Byteable.byteToBoolean(this)
+
+fun ByteBuffer.putString(text: String) {
+    Byteable.writeString(text, this)
+}
+
+fun ByteBuffer.putBoolean(bool: Boolean) {
+    Byteable.writeBool(bool, this)
+}
+
+fun ByteBuffer.putDateTime(date: DateTime) {
+    Byteable.writeDateTime(date, this)
 }

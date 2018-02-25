@@ -1,10 +1,9 @@
 package blue.koenig.kingsfamilylibrary.view.family
 
-import android.content.Context
 import blue.koenig.kingsfamilylibrary.model.FamilyConfig
-import blue.koenig.kingsfamilylibrary.model.Utils
 import blue.koenig.kingsfamilylibrary.model.communication.ConnectionEventListener
 import blue.koenig.kingsfamilylibrary.model.communication.ServerConnection
+import com.koenig.FamilyConstants
 import com.koenig.commonModel.User
 import com.koenig.communication.messages.FamilyMessage
 import com.koenig.communication.messages.TextMessage
@@ -17,18 +16,18 @@ import org.slf4j.LoggerFactory
  * Created by Thomas on 01.11.2017.
  */
 
-class LoginHandler(internal var connection: ServerConnection, private val context: Context) : ConnectionEventListener {
+class LoginHandler(internal var connection: ServerConnection, private val config: FamilyConfig) : ConnectionEventListener {
     private val logger = LoggerFactory.getLogger(javaClass.simpleName)
     var isLogin = false
         private set
     private var listener: LoginListener? = null
     var isLoggingIn: Boolean = false
-    var members: List<User>? = null
+    var members: List<User>
         private set
 
     init {
         connection.addOnConnectionEventListener(this)
-        members = FamilyConfig.getFamilyMembers(context)
+        members = config.familyMembers
     }
 
     protected fun processFamilyCommand(words: Array<String>) {
@@ -85,7 +84,7 @@ class LoginHandler(internal var connection: ServerConnection, private val contex
                 if (listener != null) {
                     listener!!.onFamilyMembers(familyMemberMessage.members)
                 }
-                FamilyConfig.setFamilyMembers(context, members!!)
+                config.familyMembers = members
                 isLogin = true
                 isLoggingIn = false
                 if (listener != null) listener!!.onLogin()
@@ -94,7 +93,7 @@ class LoginHandler(internal var connection: ServerConnection, private val contex
     }
 
     private fun userInfo(user: User) {
-        Utils.setUserId(connection, context, user.id)
+        config.userId = user.id
 
         if (user.family.isEmpty()) {
             // no family
@@ -122,9 +121,8 @@ class LoginHandler(internal var connection: ServerConnection, private val contex
 
         logger.info("Login from LoginHandler")
         isLoggingIn = true
-        val userId = FamilyConfig.getUserId(context)
-        if (userId != FamilyConfig.NO_ID) {
-            Utils.setUserId(connection, context, userId)
+        val userId = config.userId
+        if (userId != FamilyConstants.NO_ID) {
             connection.sendFamilyMessage(FamilyTextMessages.loginMessage())
         } else {
             logger.info("No id for user found")

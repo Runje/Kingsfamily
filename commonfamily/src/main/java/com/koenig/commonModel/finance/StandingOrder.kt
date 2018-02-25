@@ -1,7 +1,6 @@
 package com.koenig.commonModel.finance
 
-import com.koenig.commonModel.Byteable
-import com.koenig.commonModel.Frequency
+import com.koenig.commonModel.*
 
 import org.joda.time.DateTime
 

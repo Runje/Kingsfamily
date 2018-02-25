@@ -41,6 +41,7 @@ dependencies {
     implementation project(':commonfamily')
     // Dependency Injection
     kapt "com.google.dagger:dagger-compiler:2.13"
+
     implementation 'com.google.dagger:dagger:2.13'
     compileOnly 'javax.annotation:jsr250-api:1.0'
     implementation 'org.slf4j:slf4j-android:1.7.22'

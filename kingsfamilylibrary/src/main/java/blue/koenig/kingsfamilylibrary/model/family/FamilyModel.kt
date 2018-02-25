@@ -4,7 +4,7 @@ import android.content.Context
 import android.support.annotation.StringRes
 import blue.koenig.kingsfamilylibrary.FamilyApplication
 import blue.koenig.kingsfamilylibrary.R
-import blue.koenig.kingsfamilylibrary.model.Utils
+import blue.koenig.kingsfamilylibrary.model.FamilyConfig
 import blue.koenig.kingsfamilylibrary.model.communication.ConnectionEventListener
 import blue.koenig.kingsfamilylibrary.model.communication.ServerConnection
 import blue.koenig.kingsfamilylibrary.view.family.FamilyView
@@ -26,7 +26,7 @@ import java.util.*
  */
 
 @Suppress("UNUSED_PARAMETER")
-abstract class FamilyModel(protected var connection: ServerConnection, protected var context: Context, protected var loginHandler: LoginHandler) : ConnectionEventListener, LoginListener {
+abstract class FamilyModel(protected var connection: ServerConnection, protected var context: Context, protected var loginHandler: LoginHandler, val config: FamilyConfig) : ConnectionEventListener, LoginListener {
     protected var logger = LoggerFactory.getLogger(javaClass.simpleName)
     protected var plugins: MutableList<Plugin> = ArrayList()
     protected var view: FamilyView = NullFamilyView()
@@ -58,12 +58,8 @@ abstract class FamilyModel(protected var connection: ServerConnection, protected
     }
 
     fun importUser(userId: String) {
-        setUserId(userId.trim())
+        config.userId = userId.trim()
         connection.sendFamilyMessage(FamilyTextMessages.loginMessage())
-    }
-
-    private fun setUserId(userId: String) {
-        Utils.setUserId(connection, context, userId)
     }
 
     override fun onLogin() {

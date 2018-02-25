@@ -6,13 +6,16 @@ import com.koenig.commonModel.database.DatabaseItem
 import com.koenig.commonModel.finance.BankAccount
 import com.koenig.commonModel.finance.Expenses
 import com.koenig.commonModel.finance.StandingOrder
+import io.reactivex.Observable
 import org.joda.time.DateTime
 import java.sql.SQLException
 
 /**
  * Created by Thomas on 07.02.2018.
  */
-interface ExpensesRepository : Repository<Expenses>
+interface ExpensesRepository : Repository<Expenses> {
+    val compensations: Map<DateTime, Expenses>
+}
 
 interface StandingOrderRepository : Repository<StandingOrder> {
     @Throws(SQLException::class)

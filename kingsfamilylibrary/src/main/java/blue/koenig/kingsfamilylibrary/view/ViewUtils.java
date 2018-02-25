@@ -55,7 +55,7 @@ public class ViewUtils {
         builder.setTitle(R.string.date);
         if (unlimited) {
             builder.setNeutralButton(R.string.unlimited, (dialog, which) -> {
-                dateListener.onDate(FamilyConstants.UNLIMITED);
+                dateListener.onDate(FamilyConstants.INSTANCE.getUNLIMITED());
             });
         }
         builder.setNegativeButton(R.string.cancel, null);

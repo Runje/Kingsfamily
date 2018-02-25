@@ -3,6 +3,7 @@ package com.koenig.commonModel.database
 import com.koenig.commonModel.Item
 import com.koenig.commonModel.User
 import com.koenig.communication.messages.FamilyMessage
+import io.reactivex.subjects.BehaviorSubject
 import org.joda.time.DateTime
 import org.slf4j.LoggerFactory
 import java.sql.SQLException
@@ -80,7 +81,7 @@ abstract class DatabaseTable<T : Item> {
 
     fun toItemList(list: List<DatabaseItem<out T>>): List<T> {
         val users = ArrayList<T>(list.size)
-        list.mapTo(users) { it.getItem() }
+        list.mapTo(users) { it.item }
         return users
     }
 
@@ -127,7 +128,7 @@ abstract class DatabaseTable<T : Item> {
                 ");"
     }
 
-    protected fun getUsers(userService: UserService, usersText: String): List<User> {
+    protected fun getUsers(userService: UserService, usersText: String): MutableList<User> {
         val users = ArrayList<User>()
         if (!usersText.isEmpty()) {
             val userIds = usersText.split(FamilyMessage.SEPARATOR.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()

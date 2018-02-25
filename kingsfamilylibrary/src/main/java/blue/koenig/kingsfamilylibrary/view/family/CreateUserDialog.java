@@ -46,7 +46,7 @@ class CreateUserDialog {
                 birthdayPickerFragment.setListener(new ViewUtils.DateListener() {
                     @Override
                     public void onDate(DateTime dateTime) {
-                        editBirthday.setText(Utils.dateToString(dateTime));
+                        editBirthday.setText(Utils.INSTANCE.dateToString(dateTime));
                     }
                 });
 
@@ -59,7 +59,7 @@ class CreateUserDialog {
             public void onClick(DialogInterface dialog, int which) {
                 String name = editName.getText().toString();
                 if (createUser) {
-                    listener.onCreateUser(name, Utils.stringToDateTime(editBirthday.getText().toString()));
+                    listener.onCreateUser(name, Utils.INSTANCE.stringToDateTime(editBirthday.getText().toString()));
                 } else {
                     // name = Id
                     listener.onImportUser(name);
