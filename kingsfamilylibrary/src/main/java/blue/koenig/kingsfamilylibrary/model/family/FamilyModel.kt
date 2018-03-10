@@ -4,7 +4,6 @@ import android.content.Context
 import android.support.annotation.StringRes
 import blue.koenig.kingsfamilylibrary.FamilyApplication
 import blue.koenig.kingsfamilylibrary.R
-import blue.koenig.kingsfamilylibrary.model.FamilyConfig
 import blue.koenig.kingsfamilylibrary.model.communication.ConnectionEventListener
 import blue.koenig.kingsfamilylibrary.model.communication.ServerConnection
 import blue.koenig.kingsfamilylibrary.view.family.FamilyView
@@ -12,6 +11,7 @@ import blue.koenig.kingsfamilylibrary.view.family.LoginHandler
 import blue.koenig.kingsfamilylibrary.view.family.LoginHandler.LoginListener
 import blue.koenig.kingsfamilylibrary.view.family.NullFamilyView
 import com.koenig.commonModel.Component
+import com.koenig.commonModel.FamilyConfig
 import com.koenig.commonModel.User
 import com.koenig.communication.messages.FamilyMessage
 import com.koenig.communication.messages.TextMessage
@@ -221,7 +221,7 @@ abstract class FamilyModel(protected var connection: ServerConnection, protected
                 val text = context.getString(R.string.createdNewFamily, familyName)
                 view.showText(text)
                 // login successfully
-                connection.sendFamilyMessage(FamilyTextMessages.getFamilyMemberMessage())
+                connection.sendFamilyMessage(FamilyTextMessages.familyMemberMessage)
             }
 
             FamilyTextMessages.CREATE_FAMILY_FAIL -> {
@@ -235,7 +235,7 @@ abstract class FamilyModel(protected var connection: ServerConnection, protected
                 val string = context.getString(R.string.joinedFamily, familyName)
                 view.showText(string)
                 // login successfully
-                connection.sendFamilyMessage(FamilyTextMessages.getFamilyMemberMessage())
+                connection.sendFamilyMessage(FamilyTextMessages.familyMemberMessage)
             }
 
             FamilyTextMessages.JOIN_FAMILY_FAIL -> {

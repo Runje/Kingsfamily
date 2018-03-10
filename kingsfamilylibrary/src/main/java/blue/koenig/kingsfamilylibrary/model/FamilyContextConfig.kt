@@ -4,76 +4,16 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import blue.koenig.kingsfamilylibrary.model.shared.FamilyContentProvider
 import com.koenig.FamilyConstants.NO_DATE_LONG
-import com.koenig.FamilyConstants.NO_ID
-import com.koenig.commonModel.Byteable
-import com.koenig.commonModel.User
-import io.reactivex.Observable
-import io.reactivex.subjects.BehaviorSubject
+import com.koenig.commonModel.*
 import net.iharder.Base64
 import org.joda.time.DateTime
-import org.slf4j.LoggerFactory
+import org.joda.time.YearMonth
 import java.io.IOException
 import java.nio.ByteBuffer
 
 /**
  * Created by Thomas on 18.09.2017.
  */
-interface FamilyConfig {
-    var userId: String
-    var familyMembers: List<User>
-    var startDate: DateTime
-
-    val userIdObservable: Observable<String>
-    val familyMembersObservable: Observable<List<User>>
-    val startDateObservable: Observable<DateTime>
-
-    fun loadBuffer(key: String): ByteBuffer?
-    fun saveBuffer(buffer: ByteBuffer, key: String)
-    fun getLastSyncDate(key: String): DateTime
-    fun saveLastSyncDate(date: DateTime, key: String)
-}
-
-abstract class FamilyConfigAbstract : FamilyConfig {
-    protected val logger = LoggerFactory.getLogger("FamilyConfig")
-    override var userId: String = NO_ID
-        set(value) {
-            field = value
-            saveUserId(value)
-            userIdObservable.onNext(value)
-        }
-
-    override var familyMembers: List<User> = emptyList()
-        set(value) {
-            field = value
-            saveFamilyMembers(value)
-            familyMembersObservable.onNext(value)
-        }
-
-    override var startDate: DateTime = DateTime()
-        set(value) {
-            field = value
-            saveStartDate(value)
-            startDateObservable.onNext(value)
-        }
-
-    override val userIdObservable = BehaviorSubject.create<String>()!!
-    override val familyMembersObservable = BehaviorSubject.create<List<User>>()!!
-    override val startDateObservable = BehaviorSubject.create<DateTime>()!!
-
-    protected abstract fun loadUserId(): String
-    protected abstract fun loadFamilyMembers(): List<User>
-    protected abstract fun loadStartDate(): DateTime
-
-    protected abstract fun saveUserId(userId: String)
-    protected abstract fun saveStartDate(date: DateTime)
-    protected abstract fun saveFamilyMembers(members: List<User>)
-
-    fun init() {
-        userId = loadUserId()
-        familyMembers = loadFamilyMembers()
-        startDate = loadStartDate()
-    }
-}
 
 open class FamilyContextConfig(val context: Context) : FamilyConfigAbstract() {
     protected val SHARED_PREF = "KINGSFAMILY_SHARED_PREF"
@@ -89,7 +29,7 @@ open class FamilyContextConfig(val context: Context) : FamilyConfigAbstract() {
     override fun saveUserId(userId: String) = FamilyContentProvider.put(context, USERID, userId)
 
     /**
-     * Gets the last sync date from shared prefs.
+     * Gets the last sync day from shared prefs.
      *
      * @param context
      * @return
@@ -100,7 +40,7 @@ open class FamilyContextConfig(val context: Context) : FamilyConfigAbstract() {
     }
 
     /**
-     * Saves the last sync date to shared prefs.
+     * Saves the last sync day to shared prefs.
      *
      * @param date
      * @param context
@@ -156,13 +96,13 @@ open class FamilyContextConfig(val context: Context) : FamilyConfigAbstract() {
 
     }
 
-    override fun loadStartDate(): DateTime {
+    override fun loadStartDate(): YearMonth {
         val preferences = context.getSharedPreferences(SPECIFIC_PREF, MODE_PRIVATE)
-        return DateTime(preferences.getLong(START_DATE, DateTime(2015, 1, 1, 0, 0).millis))
+        return preferences.getInt(START_DATE, YearMonth(2015, 1).toInt()).toYearMonth()
     }
 
-    override fun saveStartDate(date: DateTime) {
+    override fun saveStartDate(date: YearMonth) {
         val preferences = context.getSharedPreferences(SPECIFIC_PREF, MODE_PRIVATE)
-        preferences.edit().putLong(START_DATE, date.millis).apply()
+        preferences.edit().putInt(START_DATE, date.toInt()).apply()
     }
 }

@@ -11,14 +11,14 @@ import java.util.List;
 public abstract class Database {
     protected Logger logger = LoggerFactory.getLogger(getClass().getSimpleName());
     protected Connection connection;
-    protected List<DatabaseTable> tables = new ArrayList<>();
+    protected List<DatabaseItemTable> tables = new ArrayList<>();
 
     public Database(Connection connection) {
         this.connection = connection;
     }
 
     public void createAllTables() throws SQLException {
-        for (DatabaseTable table : tables) {
+        for (DatabaseItemTable table : tables) {
             if (!table.isExisting()) {
                 table.create();
                 logger.info("Table created: " + table.getTableName());
@@ -27,7 +27,7 @@ public abstract class Database {
     }
 
     public void deleteAllEntrys() throws SQLException {
-        for (DatabaseTable table : tables) {
+        for (DatabaseItemTable table : tables) {
             table.deleteAllEntrys();
         }
     }
@@ -40,7 +40,7 @@ public abstract class Database {
      * @param table
      * @throws SQLException
      */
-    protected void startTransaction(Transaction runnable, DatabaseTable table) throws SQLException {
+    protected void startTransaction(Transaction runnable, DatabaseItemTable table) throws SQLException {
         table.getLock().lock();
         try {
             connection.setAutoCommit(false);
@@ -64,7 +64,7 @@ public abstract class Database {
      * @throws SQLException
      */
     protected void startTransaction(Transaction runnable) throws SQLException {
-        for (DatabaseTable table : tables) {
+        for (DatabaseItemTable table : tables) {
             table.getLock().lock();
         }
         try {
@@ -78,7 +78,7 @@ public abstract class Database {
             throw e;
         } finally {
             connection.setAutoCommit(true);
-            for (DatabaseTable table : tables) {
+            for (DatabaseItemTable table : tables) {
                 table.getLock().unlock();
             }
         }

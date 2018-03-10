@@ -26,9 +26,9 @@ public class FamilyMemberMessage extends FamilyMessage {
 
     public FamilyMemberMessage(int version, Component component, String fromId, String toId, ByteBuffer buffer) {
         super(component);
-        this.version = version;
-        this.fromId = fromId;
-        this.toId = toId;
+        this.setVersion(version);
+        this.setFromId(fromId);
+        this.setToId(toId);
 
         int size = buffer.getShort();
         members = new ArrayList<>(size);

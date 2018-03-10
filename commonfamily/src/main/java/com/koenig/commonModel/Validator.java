@@ -1,6 +1,6 @@
 package com.koenig.commonModel;
 
-import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 /**
  * Created by Thomas on 12.11.2017.
@@ -12,8 +12,8 @@ public class Validator {
         return !string.trim().isEmpty();
     }
 
-    public static boolean dateIsReasonable(DateTime date) {
-        return date.getYear() > 1900 && date.getYear() < 2200;
+    public static boolean dayIsReasonable(LocalDate day) {
+        return day.getYear() > 1900 && day.getYear() < 2200;
     }
 
     public static boolean isEmptyOrId(String standingOrder) {

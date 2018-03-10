@@ -6,7 +6,7 @@ import com.koenig.commonModel.Repository.StandingOrderRepository
 import com.koenig.commonModel.finance.Expenses
 import com.koenig.commonModel.finance.StandingOrder
 import com.koenig.commonModel.finance.calcUuidFrom
-import org.joda.time.DateTime
+import org.joda.time.LocalDate
 import org.slf4j.LoggerFactory
 
 /**
@@ -23,7 +23,7 @@ class StandingOrderExecutor(private val standingOrderRepository: StandingOrderRe
     }
 
     private fun executeOrdersFor(order: StandingOrder) {
-        val until = if (DateTime.now().isBefore(order.endDate)) DateTime.now() else order.endDate
+        val until = if (LocalDate().isBefore(order.endDate)) LocalDate() else order.endDate
         val dates = order.getExecutionDatesUntil(until)
         dates.forEach {
             if (order.executedExpenses[it] == null) {
@@ -33,13 +33,13 @@ class StandingOrderExecutor(private val standingOrderRepository: StandingOrderRe
         }
     }
 
-    private fun executeOrder(order: StandingOrder, date: DateTime) {
-        val expenses = Expenses(order.name, order.category, order.subCategory, order.costs, order.costDistribution, date, order.id)
+    private fun executeOrder(order: StandingOrder, day: LocalDate) {
+        val expenses = Expenses(order.name, order.category, order.subCategory, order.costs, order.costDistribution, day, order.id)
         // calculate id from last standing order or standing order if it is the first
         expenses.id = calcUuidFrom(order.lastExecutedExpenses ?: order.id)
         expensesTable.add(expenses)
-        order.executedExpenses[date] = expenses.id
-        standingOrderRepository.addExpensesToStandingOrders(order.id, expenses.id, date)
+        order.executedExpenses[day] = expenses.id
+        standingOrderRepository.addExpensesToStandingOrders(order.id, expenses.id, day)
     }
 
     fun consistencyCheck(): Boolean {
@@ -55,8 +55,8 @@ class StandingOrderExecutor(private val standingOrderRepository: StandingOrderRe
                     return false
                 }
                 // Check if the dates are equal
-                else if (order?.executedExpenses?.get(it.date) == null) {
-                    logger.warn("$order has not same date as $it!")
+                else if (order?.executedExpenses?.get(it.day) == null) {
+                    logger.warn("$order has not same day as $it!")
                 }
             }
         }
@@ -64,7 +64,7 @@ class StandingOrderExecutor(private val standingOrderRepository: StandingOrderRe
         // check all standing orders
         standingOrderRepository.allItems.forEach {
             // check due dates
-            it.getExecutionDatesUntil(DateTime.now()).forEach { date ->
+            it.getExecutionDatesUntil(LocalDate()).forEach { date ->
                 if (!it.executedExpenses.containsKey(date)) {
                     logger.error("$date not in $it")
                     return false
@@ -78,8 +78,8 @@ class StandingOrderExecutor(private val standingOrderRepository: StandingOrderRe
                     return false
                 }
                 // check if the dates are equal
-                else if (expenses?.date?.equals(date) == false) {
-                    logger.warn("$expenses has not same date as $it!")
+                else if (expenses?.day?.equals(date) == false) {
+                    logger.warn("$expenses has not same day as $it!")
                 }
             }
         }
@@ -91,14 +91,11 @@ class StandingOrderExecutor(private val standingOrderRepository: StandingOrderRe
 }
 
 
-fun StandingOrder.getExecutionDatesUntil(until: DateTime): List<DateTime> {
-    val times = arrayListOf<DateTime>()
+fun StandingOrder.getExecutionDatesUntil(until: LocalDate): List<LocalDate> {
+    val times = arrayListOf<LocalDate>()
 
-    // set hour to 12 to avoid switching days because of different timezones(summer time)
-    val oldHour = firstDate.hourOfDay
-    val firstDate = firstDate.withHourOfDay(12)
-    if (firstDate.isBefore(until.withHourOfDay(13))) {
-        times.add(firstDate.withHourOfDay(oldHour))
+    if (firstDate <= until) {
+        times.add(firstDate)
     }
 
     var i = 1
@@ -107,15 +104,15 @@ fun StandingOrder.getExecutionDatesUntil(until: DateTime): List<DateTime> {
             break
         }
 
-        var nextDate: DateTime = when (frequency) {
+        val nextDate = when (frequency) {
             Frequency.Daily -> firstDate.plusDays(i * frequencyFactor)
             Frequency.Weekly -> firstDate.plusWeeks(i * frequencyFactor)
             Frequency.Monthly -> firstDate.plusMonths(i * frequencyFactor)
             Frequency.Yearly -> firstDate.plusYears(i * frequencyFactor)
         }
 
-        if (nextDate.isBefore(until.withHourOfDay(13)) && nextDate.isBefore(endDate.withHourOfDay(13))) {
-            times.add(nextDate.withHourOfDay(oldHour))
+        if (nextDate <= until && nextDate <= endDate) {
+            times.add(nextDate)
         } else {
             break
         }

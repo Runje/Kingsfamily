@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import com.koenig.FamilyConstants
 import org.joda.time.DateTime
+import org.joda.time.LocalDate
 
 /**
  * Created by Thomas on 13.10.2017.
@@ -11,10 +12,10 @@ import org.joda.time.DateTime
 
 object Utils {
 
-    fun dateToString(dateTime: DateTime): String {
-        return if (dateTime.millis == 0L) {
+    fun localDateToString(day: LocalDate): String {
+        return if (day == FamilyConstants.NO_DAY) {
             FamilyConstants.NEVER
-        } else dateTime.toString(FamilyConstants.DATE_FORMAT)
+        } else day.toString(FamilyConstants.DATE_FORMAT)
     }
 
     fun stringToDateTime(date: String): DateTime {

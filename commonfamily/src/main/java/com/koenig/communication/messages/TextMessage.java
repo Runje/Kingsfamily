@@ -25,9 +25,9 @@ public class TextMessage extends FamilyMessage {
 
     public TextMessage(int version, Component component, String fromId, String toId, ByteBuffer buffer) {
         super(component);
-        this.version = version;
-        this.fromId = fromId;
-        this.toId = toId;
+        this.setVersion(version);
+        this.setFromId(fromId);
+        this.setToId(toId);
         this.text = Byteable.Companion.byteToString(buffer);
     }
 

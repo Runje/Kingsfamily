@@ -1,8 +1,10 @@
 package com.koenig.commonModel.finance
 
-import com.koenig.commonModel.Byteable
 import com.koenig.commonModel.Item
-import org.joda.time.DateTime
+import com.koenig.commonModel.byteLength
+import com.koenig.commonModel.localDate
+import com.koenig.commonModel.writeBytes
+import org.joda.time.LocalDate
 import java.nio.ByteBuffer
 import java.util.*
 
@@ -12,36 +14,36 @@ import java.util.*
 
 class Balance : Item {
     var balance: Int = 0
-    var date: DateTime
+    var day: LocalDate
 
     override val byteLength: Int
-        get() = super.byteLength + 4 + Byteable.dateLength
+        get() = super.byteLength + 4 + day.byteLength
 
-    constructor(id: String, balance: Int, dateTime: DateTime) : super(id, Integer.toString(balance)) {
+    constructor(id: String, balance: Int, day: LocalDate) : super(id, Integer.toString(balance)) {
         this.balance = balance
-        this.date = dateTime
+        this.day = day
     }
 
-    constructor(balance: Int, dateTime: DateTime) : super(Integer.toString(balance)) {
+    constructor(balance: Int, day: LocalDate) : super(Integer.toString(balance)) {
         this.balance = balance
-        this.date = dateTime
+        this.day = day
     }
 
     constructor(buffer: ByteBuffer) : super(buffer) {
         balance = buffer.int
-        date = Byteable.Companion.byteToDateTime(buffer)
+        day = buffer.localDate
     }
 
     override fun writeBytes(buffer: ByteBuffer) {
         super.writeBytes(buffer)
         buffer.putInt(balance)
-        Byteable.Companion.writeDateTime(date, buffer)
+        day.writeBytes(buffer)
     }
 
     override fun toString(): String {
         return "Balance{" +
                 "balance=" + balance +
-                ", date=" + date +
+                ", day=" + day +
                 '}'.toString()
     }
 
@@ -59,10 +61,7 @@ class Balance : Item {
         }
 
         fun listToBytes(balances: List<Balance>): ByteArray {
-            var size = 4
-            for (balance in balances) {
-                size += balance.byteLength
-            }
+            val size = 4 + balances.sumBy { it.byteLength }
 
             val buffer = ByteBuffer.allocate(size)
             buffer.putInt(balances.size)

@@ -25,17 +25,17 @@ public class UpdatesMessage<T extends Item> extends FamilyMessage {
 
     public UpdatesMessage(int version, Component component, String fromId, String toId, List<DatabaseItem<T>> items) {
         super(component);
-        this.version = version;
-        this.fromId = fromId;
-        this.toId = toId;
+        this.setVersion(version);
+        this.setFromId(fromId);
+        this.setToId(toId);
         this.items = items;
     }
 
     public UpdatesMessage(int version, Component component, String fromId, String toId, ByteBuffer buffer) {
         super(component);
-        this.version = version;
-        this.fromId = fromId;
-        this.toId = toId;
+        this.setVersion(version);
+        this.setFromId(fromId);
+        this.setToId(toId);
         int size = buffer.getShort();
         items = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {

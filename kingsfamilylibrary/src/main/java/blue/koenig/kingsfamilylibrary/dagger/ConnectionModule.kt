@@ -1,8 +1,8 @@
 package blue.koenig.kingsfamilylibrary.dagger
 
-import blue.koenig.kingsfamilylibrary.model.FamilyConfig
 import blue.koenig.kingsfamilylibrary.model.communication.ServerConnection
 import blue.koenig.kingsfamilylibrary.view.family.LoginHandler
+import com.koenig.commonModel.FamilyConfig
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

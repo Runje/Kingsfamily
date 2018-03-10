@@ -6,6 +6,7 @@ import java.nio.ByteBuffer
  * Created by Thomas on 21.01.2018.
  */
 class Goal : Item {
+    /** Year -> Goal **/
     var goals: MutableMap<Int, Int>
     var userId: String
 

@@ -25,9 +25,9 @@ public class AskForUpdatesMessage extends FamilyMessage {
 
     public AskForUpdatesMessage(int version, Component component, String fromId, String toId, ByteBuffer buffer) {
         super(component);
-        this.version = version;
-        this.fromId = fromId;
-        this.toId = toId;
+        this.setVersion(version);
+        this.setFromId(fromId);
+        this.setToId(toId);
         this.lastSyncDate = new DateTime(buffer.getLong());
         this.updateType = Byteable.Companion.byteToEnum(buffer, ItemType.class);
     }

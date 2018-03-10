@@ -19,11 +19,17 @@ class DatabaseItem<T : Item> : Byteable {
     var lastModifiedId: String
     var insertId: String
 
-    val id: String
+    var id: String
         get() = item.id
+        set(value) {
+            item.id = value
+        }
 
-    val name: String
+    var name: String
         get() = item.name
+        set(value) {
+            item.name = value
+        }
 
     override val byteLength: Int
         get() = Byteable.Companion.dateLength * 2 + Byteable.Companion.getStringLength(lastModifiedId) + Byteable.Companion.getStringLength(insertId) + boolLength + Byteable.Companion.getItemLength(item)
@@ -57,7 +63,7 @@ class DatabaseItem<T : Item> : Byteable {
         lastModifiedId = Byteable.Companion.byteToString(buffer)
         isDeleted = Byteable.Companion.byteToBoolean(buffer)
         // Eventuell static create erstellen
-        item = Byteable.Companion.byteToItem(buffer) as T
+        item = Byteable.byteToItem<T>(buffer)
     }
 
     override fun toString(): String {

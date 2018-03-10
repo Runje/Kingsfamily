@@ -4,7 +4,6 @@ import android.content.Context
 import blue.koenig.kingsfamily.view.NullOverviewView
 import blue.koenig.kingsfamily.view.OverviewView
 import blue.koenig.kingsfamilylibrary.R
-import blue.koenig.kingsfamilylibrary.model.FamilyConfig
 import blue.koenig.kingsfamilylibrary.model.Utils
 import blue.koenig.kingsfamilylibrary.model.communication.ConnectionEventListener
 import blue.koenig.kingsfamilylibrary.model.communication.ServerConnection
@@ -12,6 +11,7 @@ import blue.koenig.kingsfamilylibrary.model.family.FamilyModel
 import blue.koenig.kingsfamilylibrary.model.family.Plugin
 import blue.koenig.kingsfamilylibrary.view.family.FamilyView
 import blue.koenig.kingsfamilylibrary.view.family.LoginHandler
+import com.koenig.commonModel.FamilyConfig
 import com.koenig.commonModel.User
 import javax.inject.Inject
 

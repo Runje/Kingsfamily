@@ -29,10 +29,10 @@ public class FinanceTextMessages {
     }
 
     public static TextMessage audFailMessage(String id) {
-        return new TextMessage(Component.FINANCE, AUD_FAIL + FamilyMessage.SEPARATOR + id);
+        return new TextMessage(Component.FINANCE, AUD_FAIL + FamilyMessage.Companion.getSEPARATOR() + id);
     }
 
     public static TextMessage audSuccessMessage(String id) {
-        return new TextMessage(Component.FINANCE, AUD_SUCCESS + FamilyMessage.SEPARATOR + id);
+        return new TextMessage(Component.FINANCE, AUD_SUCCESS + FamilyMessage.Companion.getSEPARATOR() + id);
     }
 }

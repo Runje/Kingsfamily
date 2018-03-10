@@ -1,11 +1,11 @@
 package com.koenig.commonModel
 
 
+import com.koenig.FamilyConstants
 import com.koenig.commonModel.finance.BankAccount
 import com.koenig.commonModel.finance.Expenses
 import com.koenig.commonModel.finance.StandingOrder
-import org.joda.time.DateTime
-import org.joda.time.YearMonth
+import org.joda.time.*
 import java.io.UnsupportedEncodingException
 import java.nio.ByteBuffer
 import java.nio.charset.Charset
@@ -65,17 +65,18 @@ interface Byteable {
             return String(bytes, Charset.forName(encoding)).trim { it <= ' ' }
         }
 
-        fun byteToItem(buffer: ByteBuffer): Item {
+        @Suppress("UNCHECKED_CAST")
+        fun <T : Item> byteToItem(buffer: ByteBuffer): T {
             val className = Byteable.byteToEnum(buffer, ItemType::class.java)
             return when (className) {
-                ItemType.EXPENSES -> Expenses(buffer)
-                ItemType.CATEGORY -> Category(buffer)
-                ItemType.FAMILY -> Family(buffer)
-                ItemType.OPERATION -> Operation<Item>(buffer)
-                ItemType.STANDING_ORDER -> StandingOrder(buffer)
-                ItemType.USER -> User(buffer)
-                ItemType.BANKACCOUNT -> BankAccount(buffer)
-                ItemType.GOAL -> Goal(buffer)
+                ItemType.EXPENSES -> Expenses(buffer) as T
+                ItemType.CATEGORY -> Category(buffer) as T
+                ItemType.FAMILY -> Family(buffer) as T
+                ItemType.OPERATION -> Operation<Item>(buffer) as T
+                ItemType.STANDING_ORDER -> StandingOrder(buffer) as T
+                ItemType.USER -> User(buffer) as T
+                ItemType.BANKACCOUNT -> BankAccount(buffer) as T
+                ItemType.GOAL -> Goal(buffer) as T
             }
 
             @Suppress("UNREACHABLE_CODE")
@@ -183,36 +184,34 @@ interface Byteable {
         }
 
 
-
-
-
-        fun write(map: Map<DateTime, String>, buffer: ByteBuffer) {
+        fun writeShortMap(map: Map<LocalDate, String>, buffer: ByteBuffer) {
             buffer.putShort(map.size.toShort())
             map.forEach { (date, text) ->
-                buffer.putDateTime(date)
+                date.writeBytes(buffer)
                 buffer.putString(text)
             }
         }
 
-        fun shortLength(map: Map<DateTime, String>): Int {
+        fun shortLength(map: Map<LocalDate, String>): Int {
             var size = 2
-            map.forEach { (_, text) -> size += dateLength + text.byteLength }
+            map.forEach { (day, text) -> size += day.byteLength + text.byteLength }
 
             return size
         }
 
-        fun getBytes(map: Map<DateTime, String>): ByteArray {
+
+        fun getBytesShortMap(map: Map<LocalDate, String>): ByteArray {
             val buffer = ByteBuffer.allocate(shortLength(map))
-            write(map, buffer)
+            writeShortMap(map, buffer)
             return buffer.array()
         }
 
-        fun byteToShortMap(bytes: ByteArray): MutableMap<DateTime, String> {
+        fun byteToShortMap(bytes: ByteArray): MutableMap<LocalDate, String> {
             val buffer = ByteBuffer.wrap(bytes)
-            val result = mutableMapOf<DateTime, String>()
+            val result = mutableMapOf<LocalDate, String>()
             val size = buffer.short
             for (i in 0 until size) {
-                result[buffer.dateTime] = buffer.string
+                result[buffer.localDate] = buffer.string
             }
 
             return result
@@ -270,3 +269,27 @@ fun ByteBuffer.putBoolean(bool: Boolean) {
 fun ByteBuffer.putDateTime(date: DateTime) {
     Byteable.writeDateTime(date, this)
 }
+
+val ByteBuffer.localDate
+    get() = int.toLocalDate()
+
+fun LocalDate.writeBytes(buffer: ByteBuffer) {
+    buffer.putInt(toInt())
+}
+
+fun LocalDate.toInt(): Int {
+    val days = Days.daysBetween(FamilyConstants.BEGIN_LOCAL_DATE, this)
+    return days.days
+}
+
+val LocalDate.byteLength
+    get() = 4
+
+fun Int.toLocalDate(): LocalDate = FamilyConstants.BEGIN_LOCAL_DATE.plusDays(this)
+fun Int.toYearMonth(): YearMonth = FamilyConstants.BEGIN_YEAR_MONTH.plusMonths(this)
+
+fun YearMonth.toInt(): Int {
+    return Months.monthsBetween(FamilyConstants.BEGIN_YEAR_MONTH, this).months
+}
+
+fun Boolean.toInt(): Int = if (this) 1 else 0

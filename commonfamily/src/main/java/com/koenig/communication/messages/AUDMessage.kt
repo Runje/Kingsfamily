@@ -11,6 +11,10 @@ import java.nio.ByteBuffer
  */
 
 class AUDMessage : FamilyMessage {
+    override val name: String
+        get() = NAME
+    override val contentLength: Int
+        get() = operation.byteLength
     var operation: Operation<out Item>
         internal set
 
@@ -27,14 +31,6 @@ class AUDMessage : FamilyMessage {
         this.fromId = fromId
         this.toId = toId
         operation = Operation(buffer)
-    }
-
-    override fun getName(): String {
-        return NAME
-    }
-
-    override fun getContentLength(): Int {
-        return operation.byteLength
     }
 
     override fun writeContent(buffer: ByteBuffer) {

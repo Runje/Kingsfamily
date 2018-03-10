@@ -1,9 +1,9 @@
 package blue.koenig.kingsfamilylibrary.view.family
 
-import blue.koenig.kingsfamilylibrary.model.FamilyConfig
 import blue.koenig.kingsfamilylibrary.model.communication.ConnectionEventListener
 import blue.koenig.kingsfamilylibrary.model.communication.ServerConnection
 import com.koenig.FamilyConstants
+import com.koenig.commonModel.FamilyConfig
 import com.koenig.commonModel.User
 import com.koenig.communication.messages.FamilyMessage
 import com.koenig.communication.messages.TextMessage
@@ -104,7 +104,7 @@ class LoginHandler(internal var connection: ServerConnection, private val config
         } else {
 
             // login successfully, get all family members
-            connection.sendFamilyMessage(FamilyTextMessages.getFamilyMemberMessage())
+            connection.sendFamilyMessage(FamilyTextMessages.familyMemberMessage)
         }
     }
 

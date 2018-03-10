@@ -4,7 +4,7 @@ import com.koenig.FamilyConstants
 import com.koenig.commonModel.Byteable
 import com.koenig.commonModel.Item
 import com.koenig.commonModel.User
-import org.joda.time.DateTime
+import org.joda.time.LocalDate
 import java.nio.ByteBuffer
 import java.util.*
 
@@ -19,10 +19,11 @@ class BankAccount : Item {
      */
     var balances: MutableList<Balance>
 
-    val dateTime: DateTime?
+    // latest update of balances
+    val dateTime: LocalDate
         get() = if (balances.size == 0) {
-            FamilyConstants.NO_DATE
-        } else balances[0].date
+            FamilyConstants.BEGIN_LOCAL_DATE
+        } else balances[0].day
 
     override val byteLength: Int
         get() = super.byteLength + Byteable.Companion.getListLength(owners) + Byteable.Companion.getStringLength(bank) + Byteable.Companion.getListLength(balances)
@@ -100,7 +101,7 @@ class BankAccount : Item {
     fun deleteBalance(balance: Balance) {
         var removeBalance: Balance? = null
         for (bal in balances) {
-            if (bal.date == balance.date) {
+            if (bal.day == balance.day) {
                 removeBalance = bal
                 break
             }
@@ -113,7 +114,7 @@ class BankAccount : Item {
 
         fun sortBalances(balances: List<Balance>) {
             // newest at top
-            Collections.sort(balances) { lhs, rhs -> rhs.date.compareTo(lhs.date) }
+            Collections.sort(balances) { lhs, rhs -> rhs.day.compareTo(lhs.day) }
         }
     }
 }

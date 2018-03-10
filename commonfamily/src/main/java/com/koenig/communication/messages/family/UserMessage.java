@@ -24,9 +24,9 @@ public class UserMessage extends FamilyMessage {
 
     public UserMessage(int version, Component component, String fromId, String toId, ByteBuffer buffer) {
         super(component);
-        this.version = version;
-        this.fromId = fromId;
-        this.toId = toId;
+        this.setVersion(version);
+        this.setFromId(fromId);
+        this.setToId(toId);
         user = new User(buffer);
     }
 

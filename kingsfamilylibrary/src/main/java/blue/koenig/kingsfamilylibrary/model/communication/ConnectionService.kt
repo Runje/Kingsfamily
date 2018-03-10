@@ -9,8 +9,8 @@ import android.os.Messenger
 import android.util.Log
 import android.widget.Toast
 import blue.koenig.kingsfamilylibrary.FamilyApplication
-import blue.koenig.kingsfamilylibrary.model.FamilyConfig
 import blue.koenig.kingsfamilylibrary.view.family.LoginHandler
+import com.koenig.commonModel.FamilyConfig
 import com.koenig.communication.messages.FamilyMessage
 import org.slf4j.LoggerFactory
 import java.util.concurrent.Executors
