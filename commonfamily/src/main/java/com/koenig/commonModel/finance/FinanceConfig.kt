@@ -13,3 +13,5 @@ interface FinanceConfig : FamilyConfig {
     val compensationCategory: String
 
 }
+
+

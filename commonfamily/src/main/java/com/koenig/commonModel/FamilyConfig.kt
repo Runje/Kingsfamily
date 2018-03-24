@@ -15,6 +15,7 @@ import java.nio.ByteBuffer
 interface FamilyConfig {
     var userId: String
     var familyMembers: List<User>
+    // TODO: sync startMonth with server(in Family)
     var startMonth: YearMonth
 
     val userIdObservable: Observable<String>

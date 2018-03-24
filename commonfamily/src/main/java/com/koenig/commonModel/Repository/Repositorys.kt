@@ -1,7 +1,9 @@
 package com.koenig.commonModel.Repository
 
+import com.koenig.commonModel.Family
 import com.koenig.commonModel.Goal
 import com.koenig.commonModel.Item
+import com.koenig.commonModel.database.CategoryTable
 import com.koenig.commonModel.database.DatabaseItem
 import com.koenig.commonModel.database.MonthStatisticTable
 import com.koenig.commonModel.finance.BankAccount
@@ -60,7 +62,8 @@ interface AssetsDbRepository : AssetsRepository {
     }
 
     private fun BankAccount.toTableName(): String {
-        return id + "_assets"
+        // need to begin with char not number, and - is not allwoed
+        return ("assets_$id").replace("-", "_")
     }
 
     override fun save(map: MutableMap<BankAccount, MutableMap<YearMonth, MonthStatistic>>) {
@@ -133,6 +136,60 @@ interface CategoryRepository {
     val hasChanged: Observable<Any>
 }
 
+
+interface CategoryDbRepository : CategoryRepository {
+    val categoryTable: CategoryTable
+
+    val allCategoryAbsoluteTable: MonthStatisticTable
+    val allCategoryDeltaTable: MonthStatisticTable
+    override val allCategoryAbsoluteStatistics: MutableMap<YearMonth, MonthStatistic>
+        get() = allCategoryAbsoluteTable.allAsMap.toMutableMap()
+    override val allCategoryDeltaStatistics: MutableMap<YearMonth, MonthStatistic>
+        get() = allCategoryDeltaTable.allAsMap.toMutableMap()
+
+    override fun getCategoryAbsoluteStatistics(category: String): MutableMap<YearMonth, MonthStatistic> {
+        return getAbsoluteTable(category).allAsMap.toMutableMap()
+    }
+
+    override fun getCategoryDeltaStatistics(category: String): MutableMap<YearMonth, MonthStatistic> {
+        return getDeltaTable(category).allAsMap.toMutableMap()
+    }
+
+    private fun getDeltaTable(category: String): MonthStatisticTable {
+        return getTable(category + "_delta")
+    }
+
+    private fun getAbsoluteTable(category: String): MonthStatisticTable {
+        return getTable(category + "_absolute")
+    }
+
+    fun getTable(name: String): MonthStatisticTable
+
+
+    override fun saveAllCategoryAbsoluteStatistics(map: MutableMap<YearMonth, MonthStatistic>) {
+        allCategoryAbsoluteTable.overwriteAll(map.values)
+    }
+
+    override fun saveAllCategoryDeltaStatistics(map: MutableMap<YearMonth, MonthStatistic>) {
+        allCategoryDeltaTable.overwriteAll(map.values)
+    }
+
+    override fun saveCategoryAbsoluteStatistics(category: String, map: MutableMap<YearMonth, MonthStatistic>) {
+        getAbsoluteTable(category).overwriteAll(map.values)
+    }
+
+    override fun saveCategoryDeltaStatistics(category: String, deltaMap: MutableMap<YearMonth, MonthStatistic>) {
+        getDeltaTable(category).overwriteAll(deltaMap.values)
+    }
+
+    override val savedCategorys: List<String>
+    // TODO: what about sub categories?
+        get() = categoryTable.allItems.map { it.name }
+    override val hasChanged: Observable<Any>
+        get() = categoryTable.hasChanged.cast(Any::class.java)
+}
+
+
 interface Repository<T : Item> {
     val hasChanged: Observable<Boolean>
 
@@ -151,4 +208,8 @@ interface Repository<T : Item> {
     fun update(item: T)
 
     fun getFromId(id: String): T?
+}
+
+interface FamilyRepository {
+    val allFamilies: List<Family>
 }

@@ -46,13 +46,15 @@ class Expenses : BookkeepingEntry {
         buffer.putBoolean(isCompensation)
     }
 
+    override fun toString(): String {
+        return "Expenses(day=$day, standingOrder='$standingOrder', isCompensation=$isCompensation, bookkeepingEntry=${super.toString()})"
+    }
+
 
     override val isValid: Boolean
         get() {
             return super.isValid && Validator.dayIsReasonable(day) && Validator.isEmptyOrId(standingOrder)
         }
 
-    override fun toString(): String {
-        return "Expenses(day=$day, standingOrder='$standingOrder', isCompensation=$isCompensation)"
-    }
+
 }

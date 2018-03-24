@@ -1,10 +1,7 @@
 package com.koenig.commonModel.finance.statistics
 
-import com.koenig.commonModel.Byteable
-import com.koenig.commonModel.User
+import com.koenig.commonModel.*
 import com.koenig.commonModel.finance.CostDistribution
-import com.koenig.commonModel.writeBytes
-import com.koenig.commonModel.yearMonth
 import org.joda.time.DateTime
 import org.joda.time.YearMonth
 import java.nio.ByteBuffer
@@ -89,7 +86,7 @@ interface StatisticEntry : Byteable {
 }
 
 data class MonthStatistic(val month: YearMonth, override val entryMap: Map<User, Int> = mapOf()) : StatisticEntry {
-    override val dateLength: Int = 3
+    override val dateLength: Int = month.byteLength
 
     constructor(buffer: ByteBuffer) : this(buffer.yearMonth, StatisticEntry.bufferToEntryMap(buffer))
 

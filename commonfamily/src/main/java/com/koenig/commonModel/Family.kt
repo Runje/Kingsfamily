@@ -1,7 +1,7 @@
 package com.koenig.commonModel
 
 import com.koenig.FamilyConstants
-import org.joda.time.LocalDate
+import org.joda.time.YearMonth
 import java.nio.ByteBuffer
 import java.util.*
 
@@ -11,18 +11,18 @@ import java.util.*
 
 class Family : Item {
     var users: MutableList<User>
-    var startDate: LocalDate = FamilyConstants.BEGIN_LOCAL_DATE
+    var startMonth: YearMonth = FamilyConstants.BEGIN_YEAR_MONTH
 
     override val byteLength: Int
-        get() = super.byteLength + Byteable.Companion.getListLength(users)
+        get() = super.byteLength + Byteable.getListLength(users) + startMonth.byteLength
 
     constructor(name: String) : super(name) {
         users = ArrayList()
     }
 
-    constructor(name: String, users: MutableList<User>, startDate: LocalDate) : super(name) {
+    constructor(name: String, users: MutableList<User>, startDate: YearMonth) : super(name) {
         this.users = users
-        this.startDate = startDate
+        this.startMonth = startDate
     }
 
     constructor(buffer: ByteBuffer) : super(buffer) {
@@ -32,7 +32,7 @@ class Family : Item {
             users.add(User(buffer))
         }
 
-
+        startMonth = buffer.yearMonth
     }
 
     constructor(id: String, name: String, users: MutableList<User>) : super(id, name) {
@@ -43,7 +43,7 @@ class Family : Item {
     override fun writeBytes(buffer: ByteBuffer) {
         super.writeBytes(buffer)
         Byteable.Companion.writeList(users, buffer)
-        startDate.writeBytes(buffer)
+        startMonth.writeBytes(buffer)
     }
 
 }

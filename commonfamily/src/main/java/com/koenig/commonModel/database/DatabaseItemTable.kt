@@ -20,6 +20,15 @@ interface DatabaseItemTable<T : Item> : ItemSubject<T>, DatabaseTable<DatabaseIt
     var onUpdateListeners: MutableList<OnUpdateListener<T>>
     val hasChanged: BehaviorSubject<Boolean>
 
+    val itemSpecificCreateStatement: String
+    override val tableSpecificCreateStatement: String
+        get() = DatabaseItemTable.COLUMN_ID + " TEXT PRIMARY KEY, " +
+                DatabaseItemTable.COLUMN_DELETED + " INT, " +
+                DatabaseItemTable.COLUMN_INSERT_DATE + " LONG, " +
+                DatabaseItemTable.COLUMN_INSERT_ID + " TEXT, " +
+                DatabaseItemTable.COLUMN_MODIFIED_DATE + " LONG, " +
+                DatabaseItemTable.COLUMN_MODIFIED_ID + " TEXT, " +
+                DatabaseItemTable.COLUMN_NAME + " TEXT" + itemSpecificCreateStatement
     val allItems: List<T>
         get() = toItemList(all)
 
@@ -60,13 +69,14 @@ interface DatabaseItemTable<T : Item> : ItemSubject<T>, DatabaseTable<DatabaseIt
     }
 
 
-    fun getUsers(userService: UserService, usersText: String): MutableList<User> {
+    fun getUsers(userService: (String) -> User?, usersText: String): MutableList<User> {
         val users = ArrayList<User>()
         if (!usersText.isEmpty()) {
             val userIds = usersText.split(FamilyMessage.SEPARATOR.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             for (id in userIds) {
                 try {
-                    users.add(userService.getUserFromId(id))
+                    val user = userService.invoke(id)
+                    user?.let { users.add(it) } ?: throw SQLException("User with id $id not found")
                 } catch (e: SQLException) {
                     // don't add user to result
                     // TODO: logger.error("Couldn't find user with id: " + id)

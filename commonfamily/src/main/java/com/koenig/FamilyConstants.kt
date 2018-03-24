@@ -26,4 +26,6 @@ object FamilyConstants {
     const val OVERALL_STRING: String = "ALL"
     const val FUTURE_STRING: String = "FUTURE"
     val BEGIN_YEAR_MONTH: YearMonth = YearMonth(1970, 1)
+    val COMPENSATION_NAME: String = "COMPENSATION"
+    val COMPENSATION_CATEGORY: String = "COMPENSATION"
 }

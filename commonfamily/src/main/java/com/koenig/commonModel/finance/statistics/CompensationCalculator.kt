@@ -34,12 +34,15 @@ class CompensationCalculator(private val expensesRepository: ExpensesRepository,
         // update or add compensations
         compensations.forEach { new ->
             oldCompensations[new.day]?.let { old ->
+                val distribution = CostDistribution()
                 users.forEach { user ->
-                    val distribution = CostDistribution()
                     distribution[user] = old.costDistribution[user] + new.costDistribution[user]
-                    old.costDistribution = distribution
                 }
+                old.costDistribution = distribution
 
+                old.costs = old.costDistribution.sumTheory()
+
+                // TODO: only update when changed
                 // update
                 expensesRepository.update(old)
 

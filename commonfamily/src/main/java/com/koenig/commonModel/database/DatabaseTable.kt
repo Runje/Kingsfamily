@@ -4,14 +4,9 @@ import java.sql.SQLException
 import java.util.concurrent.locks.Lock
 
 interface DatabaseTable<T> {
-
-
     var lock: Lock
-
     val tableName: String
     val columnNames: List<String>
-
-
 
     @Throws(SQLException::class)
     fun isExisting(): Boolean
@@ -28,13 +23,7 @@ interface DatabaseTable<T> {
 
     fun buildCreateStatement(): String {
         return "CREATE TABLE IF NOT EXISTS " + tableName + " (" +
-                DatabaseItemTable.COLUMN_ID + " TEXT PRIMARY KEY, " +
-                DatabaseItemTable.COLUMN_DELETED + " INT, " +
-                DatabaseItemTable.COLUMN_INSERT_DATE + " LONG, " +
-                DatabaseItemTable.COLUMN_INSERT_ID + " TEXT, " +
-                DatabaseItemTable.COLUMN_MODIFIED_DATE + " LONG, " +
-                DatabaseItemTable.COLUMN_MODIFIED_ID + " TEXT, " +
-                DatabaseItemTable.COLUMN_NAME + " TEXT" +
+
                 tableSpecificCreateStatement +
                 ");"
     }

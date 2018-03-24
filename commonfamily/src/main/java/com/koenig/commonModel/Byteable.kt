@@ -252,6 +252,9 @@ val String.byteLength: Int
 val DateTime.byteLength: Int
     get() = Byteable.dateLength
 
+val YearMonth.byteLength: Int
+    get() = 4
+
 val ByteBuffer.dateTime: DateTime
     get() = Byteable.byteToDateTime(this)
 

@@ -26,7 +26,7 @@ class AssetsCalculator(bankSubject: ItemSubject<BankAccount>, startDateObservabl
     private var absoluteAssetsMap: MutableMap<BankAccount, MutableMap<YearMonth, MonthStatistic>> = assetsRepository.load()
     private var lock = ReentrantLock()
     val allAssets: BehaviorSubject<MutableMap<YearMonth, MonthStatistic>>
-    val deltaAssetsForAll: BehaviorSubject<Map<YearMonth, MonthStatistic>>
+    val deltaAssetsForAll: BehaviorSubject<Map<YearMonth, MonthStatistic>> = BehaviorSubject.create()
 
     val entrysForAll: MutableMap<YearMonth, MonthStatistic>
         get() {
@@ -47,7 +47,7 @@ class AssetsCalculator(bankSubject: ItemSubject<BankAccount>, startDateObservabl
         startDateObservable.subscribe { startDate = it }
         endDateObservable.subscribe { endDate = it }
         allAssets = BehaviorSubject.createDefault(absoluteAssetsMap[ALL_ASSETS] ?: mutableMapOf())
-        deltaAssetsForAll = BehaviorSubject.createDefault(calcDeltaMapFromAll(entrysForAll))
+        calcDeltaMapFromAll(entrysForAll)
         bankSubject.addAddListener({ bankAccount -> addBankAccount(bankAccount) })
         bankSubject.addDeleteListener({ bankAccount -> deleteBankAccount(bankAccount!!) })
         bankSubject.addUpdateListener({ _, newBankAccount -> updateBankAccount(newBankAccount) })
@@ -187,9 +187,9 @@ class AssetsCalculator(bankSubject: ItemSubject<BankAccount>, startDateObservabl
         // convert to year month delta map
         val deltaMap = mutableMapOf<YearMonth, MonthStatistic>()
         yearMonthRange(startDate, endDate).forEach {
-            val thisMonth = allEntries[it] ?: allEntries[it.plusMonths(1)]
-            val nextMonth = allEntries[it.plusMonths(1)] ?: allEntries[it]
-            deltaMap[it] = (nextMonth!! - thisMonth!!).withMonth(it)
+            val thisMonth = allEntries[it] ?: (allEntries[it.plusMonths(1)] ?: MonthStatistic(it))
+            val nextMonth = allEntries[it.plusMonths(1)] ?: (allEntries[it] ?: MonthStatistic(it))
+            deltaMap[it] = (nextMonth - thisMonth).withMonth(it)
         }
 
         deltaAssetsForAll.onNext(deltaMap)
@@ -234,7 +234,7 @@ class AssetsCalculator(bankSubject: ItemSubject<BankAccount>, startDateObservabl
             val firstBalance = balances.last()
             var firstMonth = firstBalance.day.yearMonth
 
-            // if it is after 15. the month after is the first month
+            // if it is after dueday the month after is the first month
             if (firstBalance.day.dayOfMonth().get() > dayOfMonthDeadline) {
                 firstMonth = firstMonth.plusMonths(1)
             }
@@ -307,7 +307,7 @@ private fun distributeValueToEntryMap(value: Int, owners: List<User>): Map<User,
         val user = owners[i]
         if (i == n - 1) {
             // last one gets the rest
-            valuePart = valuePart - distributed
+            valuePart = value - distributed
         }
 
         entryMap[user] = valuePart
