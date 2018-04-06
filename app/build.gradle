@@ -4,7 +4,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.0'
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "blue.koenig.kingsfamily"
         minSdkVersion 18
@@ -35,27 +35,34 @@ kapt {
 }
 
 dependencies {
+    ext.dagger_version = '2.15'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    implementation 'com.android.support:appcompat-v7:27.+'
-    implementation 'com.android.support:design:27.+'
-
+    implementation 'com.android.support:appcompat-v7:27.1.0'
+    implementation 'com.android.support:design:27.1.0'
+    implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation 'joda-time:joda-time:2.9.9'
     testImplementation 'junit:junit:4.12'
     implementation project(':commonfamily')
     implementation project(':kingsfamilylibrary')
     implementation project(':tcpcommunication')
     // Dependency Injection
-    kapt  "com.google.dagger:dagger-compiler:2.13"
-    implementation "com.google.dagger:dagger:2.13"
-    compileOnly 'javax.annotation:jsr250-api:1.0'
+    // dagger
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    implementation "com.google.dagger:dagger:$dagger_version"
+
+    // dagger android
+    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
+    implementation "com.google.dagger:dagger-android:$dagger_version"
+    implementation "com.google.dagger:dagger-android-support:$dagger_version"
+    //compileOnly 'javax.annotation:jsr250-api:1.0'
     implementation 'org.slf4j:slf4j-android:1.7.22'
     //compile files('../../Utilties/tcpcommunication/build/libs/tcpcommunication.jar')
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    implementation 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    //implementation 'com.jakewharton:butterknife:8.8.1'
+    //annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 }
 
 

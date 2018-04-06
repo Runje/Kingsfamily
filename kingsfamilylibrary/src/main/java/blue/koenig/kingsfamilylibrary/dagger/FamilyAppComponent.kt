@@ -1,7 +1,6 @@
 package blue.koenig.kingsfamilylibrary.dagger
 
 import blue.koenig.kingsfamilylibrary.FamilyApplication
-import blue.koenig.kingsfamilylibrary.model.communication.ConnectionService
 import dagger.Component
 import javax.inject.Singleton
 
@@ -13,5 +12,5 @@ import javax.inject.Singleton
 interface FamilyAppComponent {
     fun inject(target: FamilyApplication)
 
-    fun inject(connectionService: ConnectionService)
+
 }

@@ -1,6 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'kotlin'
-
+ext.kotlin_version = '1.2.31'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'joda-time:joda-time:2.9.9'
@@ -9,14 +9,14 @@ dependencies {
 
     implementation project(':tcpcommunication')
     implementation 'junit:junit:4.12'
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'com.google.guava:guava:23.6-android'
 }
 
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 buildscript {
-    ext.kotlin_version = '1.2.30'
+
     repositories {
         mavenCentral()
     }

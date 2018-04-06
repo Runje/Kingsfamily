@@ -26,7 +26,7 @@ class AUDMessage : FamilyMessage {
         this.operation = operation
     }
 
-    constructor(version: Int, component: Component, fromId: String, toId: String, buffer: ByteBuffer) : super(component) {
+    constructor(version: Int, component: Component, fromId: String, toId: String, messageId: String, buffer: ByteBuffer) : super(component, messageId) {
         this.version = version
         this.fromId = fromId
         this.toId = toId

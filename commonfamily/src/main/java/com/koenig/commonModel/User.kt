@@ -88,6 +88,10 @@ class User : Item {
         return id.hashCode()
     }
 
+    override fun toString(): String {
+        return "User(name='$name', family='$family', abbreviation='$abbreviation', birthday=$birthday)"
+    }
+
     companion object {
 
         fun permissionsToBytes(permissions: Map<Component, Permission>): ByteArray {

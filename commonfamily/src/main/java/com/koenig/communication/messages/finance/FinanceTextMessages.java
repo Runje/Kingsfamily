@@ -25,7 +25,7 @@ public class FinanceTextMessages {
     }
 
     public static TextMessage getUpdateFailMessage() {
-        return new TextMessage(Component.FINANCE, TextMessage.UPDATE_FAIL);
+        return new TextMessage(Component.FINANCE, TextMessage.Companion.getUPDATE_FAIL());
     }
 
     public static TextMessage audFailMessage(String id) {

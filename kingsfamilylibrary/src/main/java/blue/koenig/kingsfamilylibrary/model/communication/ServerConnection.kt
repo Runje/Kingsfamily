@@ -55,7 +55,7 @@ class ServerConnection(userIdObservable: Observable<String>) : SocketChannelTCPC
     override fun onReceiveBytes(bytes: ByteArray) {
 
         logger.info("Receive bytes: " + bytes.size)
-        val msg: FamilyMessage
+        val msg: FamilyMessage?
         try {
             msg = Parser.parse(ByteBuffer.wrap(bytes))
 

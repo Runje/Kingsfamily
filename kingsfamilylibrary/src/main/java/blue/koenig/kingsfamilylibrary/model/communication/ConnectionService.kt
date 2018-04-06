@@ -8,15 +8,10 @@ import android.os.Message
 import android.os.Messenger
 import android.util.Log
 import android.widget.Toast
-import blue.koenig.kingsfamilylibrary.FamilyApplication
 import blue.koenig.kingsfamilylibrary.view.family.LoginHandler
-import com.koenig.commonModel.FamilyConfig
 import com.koenig.communication.messages.FamilyMessage
 import org.slf4j.LoggerFactory
-import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
-import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 /**
  * Created by Thomas on 01.11.2017.
@@ -32,8 +27,8 @@ class ConnectionService : Service(), ConnectionEventListener {
         private set
     private var service: ScheduledExecutorService? = null
     private var loginHandler: LoginHandler? = null
-    @Inject
-    lateinit var config: FamilyConfig
+    /**@Inject
+    lateinit var config: FamilyConfig**/
 
     override fun onConnectionStatusChange(connected: Boolean) {
 
@@ -50,19 +45,20 @@ class ConnectionService : Service(), ConnectionEventListener {
     override fun onBind(intent: Intent): IBinder? {
         Log.d("ConnectionService", "On Bind")
         logger.info("OnBind")
+        /**
         (application as FamilyApplication).familyAppComponent?.inject(this)
 
         serverConnection = ServerConnection(config.userIdObservable)
         serverConnection!!.addOnConnectionEventListener(this)
         service = Executors.newScheduledThreadPool(1)
         val tryConnect = Runnable {
-            if (!serverConnection!!.isConnected) {
-                serverConnection!!.connect()
-            }
+        if (!serverConnection!!.isConnected) {
+        serverConnection!!.connect()
+        }
         }
         loginHandler = LoginHandler(serverConnection!!, config)
 
-        service!!.scheduleAtFixedRate(tryConnect, 0, 1, TimeUnit.SECONDS)
+        service!!.scheduleAtFixedRate(tryConnect, 0, 1, TimeUnit.SECONDS)**/
         return mMessenger.binder
     }
 
